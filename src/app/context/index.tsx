@@ -9,16 +9,16 @@ import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 type Props = {
     children: ReactNode,
     cookies: string | null,
-  }
+}
 
-export function ContextProviders({children, cookies }: Props) {
+export function ContextProviders({ children, cookies }: Props) {
     const [config] = useState(() => getConfig());
     const [queryClient] = useState(() => new QueryClient())
     const initialState = cookieToInitialState(getConfig(), cookies)
 
     return <WagmiProvider config={config} {...(initialState ? { initialState } : {})}>
                 <QueryClientProvider client={queryClient}>
-                    <RainbowKitProvider>
+                    <RainbowKitProvider locale="en">
                         {children}
                     </RainbowKitProvider>
                 </QueryClientProvider>
