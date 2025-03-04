@@ -1,14 +1,15 @@
 @import "tailwindcss";
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer theme, base, components, utilities;
 
 @layer base {
-  html,
-  body {
-    @apply h-full bg-white text-text-dark antialiased;
-  }
+    html,
+    body {
+        @apply h-full bg-white text-gray-900 antialiased;
+    }
 
   h1, h2, h3, h4, h5, h6 {
     @apply mb-2;
@@ -24,154 +25,154 @@
 }
 
 @layer components {
-  .btn-primary {
-    @apply px-4 py-2 bg-primary text-white font-semibold rounded-lg 
-    transition-colors duration-200 hover:bg-primary-hover 
-    disabled:bg-text-light disabled:cursor-not-allowed;
-  }
+/*  .btn-primary {*/
+/*    @apply px-4 py-2 bg-primary text-white font-semibold rounded-lg*/
+/*    transition-colors duration-200 hover:bg-primary-hover*/
+/*    disabled:bg-text-light disabled:cursor-not-allowed;*/
+/*  }*/
 
-  .btn-secondary {
-    @apply px-4 py-2 bg-white border border-gray-300 text-text-dark font-semibold rounded-lg 
-    transition-colors duration-200 hover:bg-gray-50;
-  }
+/*  .btn-secondary {*/
+/*    @apply px-4 py-2 bg-white border border-gray-300 text-dark font-semibold rounded-lg*/
+/*    transition-colors duration-200 hover:bg-gray-50;*/
+/*  }*/
 
-  .btn-back {
-    @apply bg-transparent border-none text-primary font-semibold cursor-pointer py-2 
-    transition-colors duration-200 hover:text-primary-hover hover:underline;
-  }
+/*  .btn-back {*/
+/*    @apply bg-transparent border-none text-primary font-semibold cursor-pointer py-2*/
+/*    transition-colors duration-200 hover:text-primary-hover hover:underline;*/
+/*  }*/
 
-  .card {
-    @apply border border-border rounded-lg p-4 mb-4 bg-white shadow-sm;
-  }
+  /*.card {*/
+  /*  @apply border border-border rounded-lg p-4 mb-4 bg-white shadow-sm;*/
+  /*}*/
 
-  .container-narrow {
-    @apply max-w-3xl mx-auto px-4;
-  }
+/*  .container-narrow {*/
+/*    @apply max-w-3xl mx-auto px-4;*/
+/*  }*/
 
-  .form-input {
-    @apply w-full p-2 border border-border rounded-md mb-4;
-  }
+/*  .form-input {*/
+/*    @apply w-full p-2 border border-border rounded-md mb-4;*/
+/*  }*/
 
-  .tab-button {
-    @apply px-4 py-2 border border-border bg-white rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50;
-  }
+  /*.tab-button {*/
+  /*  @apply px-4 py-2 border border-b-orange-50 bg-white rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50;*/
+  /*}*/
 
-  .tab-button-active {
-    @apply bg-primary text-white border-primary;
-  }
+/*  .tab-button-active {*/
+/*    @apply bg-primary text-white border-primary;*/
+/*  }*/
 
-  .message-meta {
-    @apply text-sm text-text-light text-right;
-  }
+/*  .message-meta {*/
+/*    @apply text-sm text-text-light text-right;*/
+/*  }*/
 }
 
 /* Custom Components */
-.message-content {
-  @apply p-2 bg-secondary rounded-md my-2;
-}
+/*.message-content {*/
+/*  @apply p-2 bg-secondary rounded-md my-2;*/
+/*}*/
 
-.message-card {
-  @apply card;
-}
+/*.message-card {*/
+/*  @apply card;*/
+/*}*/
 
-.messages-container {
-  @apply mt-6 mb-8;
-}
+/*.messages-container {*/
+/*  @apply mt-6 mb-8;*/
+/*}*/
 
-.refresh-btn, .send-btn, .send-to-self-btn, .retry-btn {
-  @apply btn-primary;
-}
+/*.refresh-btn, .send-btn, .send-to-self-btn, .retry-btn {*/
+/*  @apply btn-primary;*/
+/*}*/
 
-.back-button {
-  @apply btn-back;
-}
+/*.back-button {*/
+/*  @apply btn-back;*/
+/*}*/
 
-.message-filter-btn {
-  @apply tab-button;
-}
+/*.message-filter-btn {*/
+/*  @apply tab-button;*/
+/*}*/
 
-.message-filter-btn.active {
-  @apply tab-button-active;
-}
+/*.message-filter-btn.active {*/
+/*  @apply tab-button-active;*/
+/*}*/
 
-.wallet-info {
-  @apply bg-secondary px-4 py-2 rounded-lg mb-4 text-sm;
-}
+/*.wallet-info {*/
+/*  @apply bg-secondary px-4 py-2 rounded-lg mb-4 text-sm;*/
+/*}*/
 
-.button-group {
-  @apply flex gap-2 mt-4;
-}
+/*.button-group {*/
+/*  @apply flex gap-2 mt-4;*/
+/*}*/
 
-.error {
-  @apply text-red-500 p-2 border border-red-500 rounded-md mb-4;
-}
+/*.error {*/
+/*  @apply text-red-500 p-2 border border-red-500 rounded-md mb-4;*/
+/*}*/
 
-.success {
-  @apply text-green-500 p-2 border border-green-500 rounded-md mt-2;
-}
+/*.success {*/
+/*  @apply text-green-500 p-2 border border-green-500 rounded-md mt-2;*/
+/*}*/
 
-.send-message-container {
-  @apply bg-secondary p-6 rounded-lg mt-6;
-}
+/*.send-message-container {*/
+/*  @apply bg-secondary p-6 rounded-lg mt-6;*/
+/*}*/
 
-.send-message-container h3 {
-  @apply mb-4;
-}
+/*.send-message-container h3 {*/
+/*  @apply mb-4;*/
+/*}*/
 
-.send-message-container input {
-  @apply form-input;
-}
+/*.send-message-container input {*/
+/*  @apply form-input;*/
+/*}*/
 
-.messenger-header {
-  @apply flex justify-between items-center mb-6 pb-4 border-b border-border;
-}
+/*.messenger-header {*/
+/*  @apply flex justify-between items-center mb-6 pb-4 border-b border-border;*/
+/*}*/
 
-.left-section {
-  @apply flex items-center gap-4;
-}
+/*.left-section {*/
+/*  @apply flex items-center gap-4;*/
+/*}*/
 
-.messenger-container {
-  @apply container-narrow;
-}
+/*.messenger-container {*/
+/*  @apply container-narrow;*/
+/*}*/
 
-.home-container {
-  @apply container-narrow py-8;
-}
+/*.home-container {*/
+/*  @apply container-narrow py-8;*/
+/*}*/
 
-.home-header {
-  @apply flex justify-between items-center w-full mb-8;
-}
+/*.home-header {*/
+/*  @apply flex justify-between items-center w-full mb-8;*/
+/*}*/
 
-.home-content {
-  @apply text-center w-full;
-}
+/*.home-content {*/
+/*  @apply text-center w-full;*/
+/*}*/
 
-.features-list {
-  @apply text-left my-8 p-6 rounded-lg bg-secondary;
-}
+/*.features-list {*/
+/*  @apply text-left my-8 p-6 rounded-lg bg-secondary;*/
+/*}*/
 
-.features-list ul {
-  @apply pl-6;
-}
+/*.features-list ul {*/
+/*  @apply pl-6;*/
+/*}*/
 
-.features-list li {
-  @apply mb-2;
-}
+/*.features-list li {*/
+/*  @apply mb-2;*/
+/*}*/
 
-.messenger-button {
-  @apply btn-primary mt-4;
-}
+/*.messenger-button {*/
+/*  @apply btn-primary mt-4;*/
+/*}*/
 
-@media (max-width: 768px) {
-  .messenger-container {
-    @apply px-2;
-  }
-  
-  .message-filters {
-    @apply flex-col;
-  }
-  
-  .button-group {
-    @apply flex-col;
-  }
-}
+/*@media (max-width: 768px) {*/
+/*  .messenger-container {*/
+/*    @apply px-2;*/
+/*  }*/
+
+/*  .message-filters {*/
+/*    @apply flex-col;*/
+/*  }*/
+
+/*  .button-group {*/
+/*    @apply flex-col;*/
+/*  }*/
+/*}*/
