@@ -19,19 +19,19 @@ export function MessageCard({
   const isReceivedByCurrentUser = currentAddress?.toLowerCase() === receiver.toLowerCase()
   
   return (
-    <Card className={isSentByCurrentUser ? 'bg-blue-50' : ''}>
+    <Card className={`message-item hover:shadow-elevation-2 transition-all duration-300 ${isSentByCurrentUser ? 'bg-blue-50 border-blue-100' : ''}`}>
       <CardHeader className="flex justify-between">
         <div>
-          <p>
-            <strong>From:</strong>{" "}
-            <span className={isSentByCurrentUser ? 'text-primary font-medium' : ''}>
+          <p className="mb-1">
+            <strong className="text-gray-700">From:</strong>{" "}
+            <span className={`font-medium ${isSentByCurrentUser ? 'text-primary-600' : 'text-gray-900'}`}>
               {sender.slice(0, 6)}...{sender.slice(-4)}
               {isSentByCurrentUser && " (You)"}
             </span>
           </p>
-          <p>
-            <strong>To:</strong>{" "}
-            <span className={isReceivedByCurrentUser ? 'text-primary font-medium' : ''}>
+          <p className="mb-0">
+            <strong className="text-gray-700">To:</strong>{" "}
+            <span className={`font-medium ${isReceivedByCurrentUser ? 'text-primary-600' : 'text-gray-900'}`}>
               {receiver.slice(0, 6)}...{receiver.slice(-4)}
               {isReceivedByCurrentUser && " (You)"}
             </span>
@@ -40,11 +40,13 @@ export function MessageCard({
       </CardHeader>
       
       <CardContent>
-        <p className="message-content">{content}</p>
+        <div className="p-3 bg-gray-100 rounded-lg my-2 break-words">
+          {content}
+        </div>
       </CardContent>
       
       <CardFooter className="flex justify-end">
-        <p className="message-meta">
+        <p className="text-xs text-gray-500 italic">
           {new Date(Number(timestamp) * 1000).toLocaleString()}
         </p>
       </CardFooter>
