@@ -46,7 +46,7 @@ npm install
 3. Set up your environment variables:
 
 ```bash
-cp .env.example packages/frontend/.env.local
+cp .env.example .env.local
 ```
 
 Then edit `.env.local` with your own values for API keys.

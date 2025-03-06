@@ -8,10 +8,13 @@
     "clean": "hardhat clean",
     "node": "hardhat node",
     "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network localhost",
+    "deploy:sepolia": "node scripts/deploy-sepolia.js",
     "deploy": "hardhat run scripts/deploy.js",
+    "check:balance": "hardhat run scripts/check-balance.js",
+    "check:balance:sepolia": "hardhat run scripts/check-balance.js --network sepolia",
     "dev": "hardhat node",
     "build": "npm run clean && npm run compile",
-    "postcompile": "cp -r artifacts/contracts/*.json ../frontend/src/contracts/"
+    "postcompile": "cp -r artifacts/contracts/ ../frontend/src/contracts/"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +22,7 @@
   "description": "",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "dotenv": "^16.4.7",
     "hardhat": "^2.22.19"
   }
 }
