@@ -1,32 +1,24 @@
 {
   "name": "messenger-dapp",
   "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "turbo": "^2.4.4",
+    "typescript": "5.8.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.8.3",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "scripts": {
-    "----------DEV----------": "",
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:contracts\"",
-    "dev:frontend": "npm run dev --workspace=frontend",
-    "dev:contracts": "npm run dev --workspace=contracts",
-    "----------BUILD----------": "",
-    "build": "npm run build:contracts && npm run build:frontend",
-    "build:frontend": "npm run build --workspace=frontend",
-    "build:contracts": "npm run build --workspace=contracts",
-    "----------TEST----------": "",
-    "test": "npm run test:contracts",
-    "test:contracts": "npm run test --workspace=contracts",
-    "----------DEPLOY----------": "",
-    "deploy:local": "npm run deploy:local --workspace=contracts",
-    "deploy:sepolia": "npm run deploy:sepolia --workspace=contracts",
-    "----------OTHER----------": "",
-    "check:balance": "npm run check:balance --workspace=contracts",
-    "check:balance:sepolia": "npm run check:balance:sepolia --workspace=contracts"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2",
-    "turbo": "^2.4.4"
-  },
-  "packageManager": "npm@10.8.3"
+  ]
 }

@@ -8,13 +8,8 @@
     "clean": "hardhat clean",
     "node": "hardhat node",
     "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network localhost",
-    "deploy:sepolia": "node scripts/deploy-sepolia.js",
-    "deploy": "hardhat run scripts/deploy.js",
-    "check:balance": "hardhat run scripts/check-balance.js",
-    "check:balance:sepolia": "hardhat run scripts/check-balance.js --network sepolia",
     "dev": "hardhat node",
-    "build": "npm run clean && npm run compile",
-    "postcompile": "cp -r artifacts/contracts/ ../frontend/src/contracts/"
+    "build": "npm run clean && npm run compile"
   },
   "keywords": [],
   "author": "",

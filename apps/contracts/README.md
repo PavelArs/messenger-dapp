@@ -47,4 +47,4 @@ npm run deploy       # Deploy using scripts/deploy.js
    npm run deploy:local
    ```
 
-3. The compiled contract artifacts will be automatically copied to the frontend package.
+3. The compiled contract artifacts will be automatically copied to the web package.

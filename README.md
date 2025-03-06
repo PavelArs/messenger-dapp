@@ -1,7 +1,7 @@
 # Messenger DApp (Monorepo)
 
 A decentralized messaging application built with Next.js, Wagmi, RainbowKit, and Solidity, organized as a monorepo with
-separate packages for the frontend and smart contracts.
+separate packages for the web and smart contracts.
 
 ## Project Structure
 
@@ -15,7 +15,7 @@ messenger-dapp/
 │   │   ├── scripts/
 │   │   └── test/
 │   │
-│   └── frontend/     # Next.js frontend application
+│   └── web/         # Next.js web application
 │       ├── public/
 │       └── src/
 ```
@@ -53,7 +53,7 @@ Then edit `.env.local` with your own values for API keys.
 
 ## Local Development
 
-You can run both the frontend and smart contract environments with a single command from the root directory:
+You can run both the web and smart contract environments with a single command from the root directory:
 
 ```bash
 npm run dev
@@ -73,7 +73,7 @@ npm run deploy:local
 This will:
 
 - Deploy the Messenger contract to your local Hardhat network
-- Generate contract integration files for the frontend
+- Generate contract integration files for the web
 
 Finally, open [http://localhost:3000](http://localhost:3000) with your browser.
 
@@ -93,13 +93,13 @@ All commands can be run from the root directory:
 
 ```bash
 # Development
-npm run dev                # Run both frontend and contracts in development mode
-npm run dev:frontend       # Run only frontend in development mode
+npm run dev                # Run both web and contracts in development mode
+npm run dev:web       # Run only web in development mode
 npm run dev:contracts      # Run only contracts (Hardhat node)
 
 # Building
-npm run build              # Build both contracts and frontend
-npm run build:frontend     # Build only frontend
+npm run build              # Build both contracts and web
+npm run build:web     # Build only web
 npm run build:contracts    # Build only contracts
 
 # Testing
@@ -133,12 +133,12 @@ npm run deploy:local
 npm run deploy
 ```
 
-### Working with Frontend Package
+### Working with web Package
 
-Navigate to the frontend package for specialized commands:
+Navigate to the web package for specialized commands:
 
 ```bash
-cd packages/frontend
+cd packages/web
 
 # Start development server
 npm run dev
@@ -179,7 +179,7 @@ npm run deploy:sepolia
 This will:
 
 - Deploy the contract to the Sepolia testnet
-- Generate contract integration files for the frontend with the new address
+- Generate contract integration files for the web with the new address
 
 ## Smart Contract Functions
 
@@ -197,7 +197,7 @@ This project uses:
 - **Monorepo Structure**: npm workspaces for managing multiple packages
 - **Smart Contracts**: Solidity and Hardhat for contract development
 - **Contract Deployment**: Hardhat Ignition for deterministic deployments
-- **Frontend**: Next.js 15 with the App Router and Turbopack
+- **web**: Next.js 15 with the App Router and Turbopack
 - **Blockchain Integration**: Wagmi v2 and Viem for type-safe Ethereum interactions
 - **Wallet Connection**: RainbowKit v2 for wallet connections
 - **State Management**: TanStack Query for data fetching and caching
