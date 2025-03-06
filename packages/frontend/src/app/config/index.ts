@@ -47,4 +47,4 @@ export function getConfig() {
   });
 }
 
-export onst currentChain = isLocalDev ? hardhatLocal : sepolia;
+export const currentChain = isLocalDev ? hardhatLocal : sepolia;
