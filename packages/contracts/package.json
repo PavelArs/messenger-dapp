@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "clean": "hardhat clean",
+    "node": "hardhat node",
+    "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network localhost",
+    "deploy": "hardhat run scripts/deploy.js",
+    "dev": "hardhat node",
+    "build": "npm run clean && npm run compile",
     "postcompile": "cp -r artifacts/contracts/*.json ../frontend/src/contracts/"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",

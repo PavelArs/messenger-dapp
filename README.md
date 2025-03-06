@@ -46,26 +46,25 @@ npm install
 3. Set up your environment variables:
 
 ```bash
-cp .env.example .env.local
+cp .env.example packages/frontend/.env.local
 ```
 
 Then edit `.env.local` with your own values for API keys.
 
-## Local Development with Hardhat
+## Local Development
 
-1. Set the environment to local in your `.env.local` file:
-
-```
-NEXT_PUBLIC_NETWORK=local
-```
-
-2. Start a local Hardhat node:
+You can run both the frontend and smart contract environments with a single command from the root directory:
 
 ```bash
-npm run node
+npm run dev
 ```
 
-3. In a new terminal, deploy the contract to the local network:
+This will:
+
+- Start the Hardhat node (local blockchain)
+- Start the Next.js development server
+
+To deploy contracts to the local network:
 
 ```bash
 npm run deploy:local
@@ -74,22 +73,46 @@ npm run deploy:local
 This will:
 
 - Deploy the Messenger contract to your local Hardhat network
-- Update your `.env.local` file with the new contract address
 - Generate contract integration files for the frontend
 
-4. Start the Next.js development server:
+Finally, open [http://localhost:3000](http://localhost:3000) with your browser.
 
-```bash
-npm run dev
+### Setting Environment Variables
+
+Set the environment to local in your `.env.local` file:
+
 ```
-
-5. Open [http://localhost:3000](http://localhost:3000) with your browser.
+NEXT_PUBLIC_NETWORK=local
+```
 
 ## Development Workflow
 
-### Working with Contracts
+### Available Scripts
 
-The contracts package includes all the Solidity smart contracts and deployment scripts:
+All commands can be run from the root directory:
+
+```bash
+# Development
+npm run dev                # Run both frontend and contracts in development mode
+npm run dev:frontend       # Run only frontend in development mode
+npm run dev:contracts      # Run only contracts (Hardhat node)
+
+# Building
+npm run build              # Build both contracts and frontend
+npm run build:frontend     # Build only frontend
+npm run build:contracts    # Build only contracts
+
+# Testing
+npm run test               # Run all tests
+npm run test:contracts     # Run contract tests
+
+# Deployment
+npm run deploy:local       # Deploy contracts to local network
+```
+
+### Working with Contracts Package
+
+Navigate to the contracts package for more specialized commands:
 
 ```bash
 cd packages/contracts
@@ -100,16 +123,19 @@ npm run compile
 # Run contract tests
 npm run test
 
+# Clean artifacts
+npm run clean
+
 # Deploy to local network
 npm run deploy:local
 
-# Deploy to Sepolia testnet
-npm run deploy:sepolia
+# Deploy using scripts/deploy.js
+npm run deploy
 ```
 
-### Working with Frontend
+### Working with Frontend Package
 
-The frontend package includes the Next.js application:
+Navigate to the frontend package for specialized commands:
 
 ```bash
 cd packages/frontend
@@ -120,8 +146,17 @@ npm run dev
 # Build for production
 npm run build
 
+# Start production server
+npm run start
+
 # Run linting
 npm run lint
+
+# Type checking
+npm run typecheck
+
+# Format code
+npm run format
 ```
 
 ## Using a Test Network
@@ -161,7 +196,11 @@ This project uses:
 
 - **Monorepo Structure**: npm workspaces for managing multiple packages
 - **Smart Contracts**: Solidity and Hardhat for contract development
-- **Frontend**: Next.js 15 with the App Router
-- **Blockchain Integration**: Wagmi for Ethereum interactions
-- **Wallet Connection**: RainbowKit for wallet connections
+- **Contract Deployment**: Hardhat Ignition for deterministic deployments
+- **Frontend**: Next.js 15 with the App Router and Turbopack
+- **Blockchain Integration**: Wagmi v2 and Viem for type-safe Ethereum interactions
+- **Wallet Connection**: RainbowKit v2 for wallet connections
+- **State Management**: TanStack Query for data fetching and caching
+- **Styling**: Tailwind CSS for utility-first styling
 - **Type Safety**: TypeScript throughout the project
+- **Dev Experience**: ESLint and Prettier for code quality

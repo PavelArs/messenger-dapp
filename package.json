@@ -5,11 +5,17 @@
     "packages/*"
   ],
   "scripts": {
-    "frontend": "npm workspace frontend",
-    "contracts": "npm workspace contracts",
-    "dev:frontend": "npm workspace frontend dev",
-    "dev:contracts": "npm workspace contracts hardhat compile",
-    "test:contracts": "npm workspace contracts hardhat test",
-    "deploy:contracts": "npm workspace contracts hardhat run scripts/deploy.js"
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:contracts\"",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:contracts": "npm run dev --workspace=contracts",
+    "build": "npm run build:contracts && npm run build:frontend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:contracts": "npm run build --workspace=contracts",
+    "test": "npm run test:contracts",
+    "test:contracts": "npm run test --workspace=contracts",
+    "deploy:local": "npm run deploy:local --workspace=contracts"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

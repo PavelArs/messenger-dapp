@@ -6,7 +6,9 @@
     "dev": "NODE_OPTIONS='--inspect' next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx}\""
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.4",
