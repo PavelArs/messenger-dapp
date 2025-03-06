@@ -1,6 +1,7 @@
 # Messenger DApp (Monorepo)
 
-A decentralized messaging application built with Next.js, Wagmi, RainbowKit, and Solidity, organized as a monorepo with separate packages for the frontend and smart contracts.
+A decentralized messaging application built with Next.js, Wagmi, RainbowKit, and Solidity, organized as a monorepo with
+separate packages for the frontend and smart contracts.
 
 ## Project Structure
 
@@ -71,6 +72,7 @@ npm run deploy:local
 ```
 
 This will:
+
 - Deploy the Messenger contract to your local Hardhat network
 - Update your `.env.local` file with the new contract address
 - Generate contract integration files for the frontend
@@ -140,6 +142,7 @@ npm run deploy:sepolia
 ```
 
 This will:
+
 - Deploy the contract to the Sepolia testnet
 - Generate contract integration files for the frontend with the new address
 
@@ -158,7 +161,7 @@ This project uses:
 
 - **Monorepo Structure**: npm workspaces for managing multiple packages
 - **Smart Contracts**: Solidity and Hardhat for contract development
-- **Frontend**: Next.js 14 with the App Router
+- **Frontend**: Next.js 15 with the App Router
 - **Blockchain Integration**: Wagmi for Ethereum interactions
 - **Wallet Connection**: RainbowKit for wallet connections
 - **Type Safety**: TypeScript throughout the project
