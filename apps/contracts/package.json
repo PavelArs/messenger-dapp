@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test",
     "compile": "hardhat compile",
     "clean": "hardhat clean",
-    "node": "hardhat node",
-    "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network localhost",
-    "dev": "hardhat node",
-    "build": "npm run clean && npm run compile"
+    "dev": "hardhat node && npm run deploy:local",
+    "build": "npm run clean && npm run compile",
+    "test": "hardhat test",
+    "format": "",
+    "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network localhost"
   },
   "keywords": [],
   "author": "",

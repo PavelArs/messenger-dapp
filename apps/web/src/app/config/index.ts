@@ -1,4 +1,4 @@
-import { cookieStorage, createStorage, http } from 'wagmi';
+import { Config, cookieStorage, createStorage, http } from 'wagmi';
 import { Chain, mainnet, sepolia } from 'wagmi/chains';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import 'dotenv/config';
@@ -6,21 +6,21 @@ import { HttpTransport } from 'viem';
 
 export const hardhatLocal: Chain = {
   id: 31337,
-  name: 'Hardhat Local',
+  name: "Hardhat Local",
   nativeCurrency: {
-    name: 'Ethereum',
-    symbol: 'ETH',
+    name: "Ethereum",
+    symbol: "ETH",
     decimals: 18,
   },
   rpcUrls: {
-    default: { http: ['http://127.0.0.1:8545'] },
-    public: { http: ['http://127.0.0.1:8545'] },
+    default: { http: ["http://127.0.0.1:8545"] },
+    public: { http: ["http://127.0.0.1:8545"] },
   },
 };
 
-const isLocalDev = process.env.NEXT_PUBLIC_NETWORK === 'local';
+const isLocalDev = process.env.NEXT_PUBLIC_NETWORK ==='local'";
 
-export function getConfig() {
+export function getConfig(): Config {
   const chains = isLocalDev ? [hardhatLocal] : [mainnet, sepolia];
 
   const transports: Record<number, HttpTransport<undefined, false>> = {};
@@ -43,7 +43,7 @@ export function getConfig() {
     storage: createStorage({
       storage: cookieStorage,
     }),
-    // @ts-expect-error fuck
+    // @ts-expect-error idc
     chains,
     transports,
   });
