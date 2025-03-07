@@ -65,14 +65,17 @@ export default function Messenger() {
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     };
 
-    const allMessages = [...(sentMessages || []), ...(receivedMessages || [])]
+    const allMessages: Message[] = [
+        ...(sentMessages || []),
+        ...(receivedMessages || []),
+    ]
         .filter(
             (message, index, self) =>
                 index ===
                 self.findIndex(
                     (m) =>
-                        m.sender === messa,ge.sender &&
-   ,                     m.receiver === message.receiver &&
+                        m.sender === message.sender &&
+                        m.receiver === message.receiver &&
                         m.content === message.content &&
                         m.timestamp === message.timestamp
                 )
@@ -150,18 +153,18 @@ export default function Messenger() {
                             <div className={styles.messageList}>
                                 {allMessages.length > 0 ? (
                                     allMessages.map((message, index) => (
-                         ,               <div
+                                        <div
                                             key={`${message.sender}-${message.receiver}-${message.timestamp}-${index}`}
                                             className={`${styles.messageCard} ${
                                                 message.sender.toLowerCase() ===
-                                                address?.t,oLowerCase()
+                                                address?.toLowerCase()
                                                     ? styles.sentMessage
                                                     : styles.receivedMessage
                                             }`}
                                         >
                                             <div
                                                 className={styles.messageHeader}
-                                  ,          >
+                                            >
                                                 {message.sender.toLowerCase() ===
                                                 address?.toLowerCase() ? (
                                                     <span>

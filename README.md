@@ -1,16 +1,33 @@
-# Messenger DApp - Contracts Package
+# Messenger DApp
 
-This package contains the Solidity smart contracts for the Messenger DApp. It uses Hardhat for development, testing, and
-deployment.
+A decentralized messaging application built on Ethereum that allows users to send messages to any Ethereum address. This
+monorepo contains both the smart contract and frontend components of the application.
 
-## Features
+## Overview
 
-- Messenger smart contract for on-chain messaging
-- Hardhat for Ethereum development environment
-- Viem for type-safe Ethereum interactions
-- Hardhat Ignition for deployment
+The Messenger DApp demonstrates how to build a decentralized application with:
 
-## Available Scripts
+- Solidity smart contracts for on-chain messaging
+- Next.js frontend with wallet connection and blockchain interaction
+- Hardhat for local development and contract deployment
+
+## Repository Structure
+
+This project is organized as a monorepo with two main packages:
+
+- **Root Directory**: Contains the Solidity smart contracts, tests, and deployment scripts
+- **`/frontend`**: Contains the Next.js web application that interacts with the smart contracts
+
+## Smart Contract Features
+
+The Messenger smart contract provides:
+
+- Send messages to any Ethereum address
+- Store message history on-chain
+- Retrieve sent and received messages
+- Track message counts
+
+## Available Scripts (Root Directory)
 
 ```shell
 # Development
@@ -25,26 +42,63 @@ npm run test         # Run tests
 
 # Deployment
 npm run deploy:local # Deploy to local network using Ignition
-npm run deploy       # Deploy using scripts/deploy.js
+npm run deploy       # Deploy to Sepolia testnet
 ```
 
-## Repository Structure
+## Deployment
 
-- `/contracts`: Smart contract source files
-- `/test`: Test files for contracts
-- `/ignition`: Hardhat Ignition deployment modules
-- `/scripts`: Deployment scripts
+The smart contracts are deployed to:
 
-## Local Development
+- **Local**: For development purposes using Hardhat's local node
+- **Sepolia Testnet**: For testing in a public environment
 
-1. Start the local Hardhat node:
+## Getting Started
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/messenger-dapp.git
+   cd messenger-dapp
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   cd frontend
+   npm install
+   ```
+
+3. Start the local Hardhat node:
    ```
    npm run dev
    ```
 
-2. In a separate terminal, deploy the contracts:
+4. In a separate terminal, deploy the contracts locally:
    ```
    npm run deploy:local
    ```
 
-3. The compiled contract artifacts will be automatically copied to the web package.
+5. Start the frontend application:
+   ```
+   cd frontend
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) to use the application
+
+## Testing the Application
+
+1. Connect your wallet using the Connect button
+2. Enter a recipient address and message content
+3. Click "Send Message" to send a message
+4. View your sent and received messages in the Messages section
+
+## Technologies Used
+
+- **Smart Contracts**: Solidity, Hardhat, Ethers.js
+- **Frontend**: Next.js, Wagmi, Viem, RainbowKit, React
+- **Testing**: Hardhat Testing Framework
+- **Deployment**: Hardhat Ignition
+
+## License
+
+This project is licensed under the MIT License.
