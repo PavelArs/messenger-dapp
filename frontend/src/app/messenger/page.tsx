@@ -1,7 +1,3 @@
 export default function Messenger() {
-
-  return (
-    <>
-    </>
-  );
+    return <></>;
 }
