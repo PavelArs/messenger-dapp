@@ -1,6 +1,6 @@
-import hre from 'hardhat';
+import hre from "hardhat";
 
-describe('Messenger', function() {
+describe("Messenger", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
@@ -8,7 +8,7 @@ describe('Messenger', function() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await hre.viem.getWalletClients();
 
-    const messenger = await hre.viem.deployContract('Messenger');
+    const messenger = await hre.viem.deployContract("Messenger");
 
     const publicClient = await hre.viem.getPublicClient();
 
@@ -16,11 +16,11 @@ describe('Messenger', function() {
       messenger,
       owner,
       otherAccount,
-      publicClient
+      publicClient,
     };
   }
 
-  describe('Deployment', function() {
+  describe("Deployment", function () {
     // it('Should set the right owner', async function() {
     //   const { messenger, owner } = await loadFixture(deployMessenger);
     //

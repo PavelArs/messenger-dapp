@@ -9,7 +9,8 @@
     "build": "npm run clean && npm run compile",
     "test": "hardhat test",
     "format": "",
-    "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network localhost"
+    "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network localhost",
+    "deploy:sepolia": "hardhat ignition deploy ignition/modules/Messenger.ts --network sepolia"
   },
   "keywords": [],
   "author": "",

@@ -1,10 +1,4 @@
-const {
-  createPublicClient,
-  http,
-  parseAbi,
-  createWalletClient,
-  formatEther,
-} = require("viem");
+const { formatEther } = require("viem");
 const { privateKeyToAccount } = require("viem/accounts");
 const hre = require("hardhat");
 require("dotenv").config();
@@ -38,35 +32,35 @@ async function main() {
       hash: messenger.deploymentTransaction.hash,
       confirmations: 5,
     });
-    console.log'Confirmed with 5 blocks!'");
+    console.log("Confirmed with 5 blocks!");
 
     // Verify the contract on Etherscan if API key exists
     if (process.env.ETHERSCAN_API_KEY) {
-      console.log('\nVerifying contract on Etherscan...');
+      console.log("\nVerifying contract on Etherscan...");
       try {
-        await hre.run('verify:verify', {
+        await hre.run("verify:verify", {
           address: messenger.address,
           constructorArguments: [],
         });
-        console.log('Contract verified on Etherscan!');
+        console.log("Contract verified on Etherscan!");
       } catch (error) {
-        console.log('Error verifying contract:', error.message);
+        console.log("Error verifying contract:", error.message);
       }
     }
   }
 
   // Create .env file for the web
-  console.log('\nDeployment information:');
+  console.log("\nDeployment information:");
   console.log(`NEXT_PUBLIC_CONTRACT_ADDRESS=${messenger.address}`);
   console.log(`NEXT_PUBLIC_NETWORK=${network}`);
 
   // Output deployment summary
-  console.log('\nDeployment summary:');
+  console.log("\nDeployment summary:");
   console.log(`- Network: ${network}`);
   console.log(`- Contract address: ${messenger.address}`);
   console.log(`- Deployer address: ${deployerAddress}`);
   console.log(
-    `- Transaction hash: ${messenger.deploymentTransaction?.hash || 'N/A'}`
+    `- Transaction hash: ${messenger.deploymentTransaction?.hash || "N/A"}`,
   );
 }
 
