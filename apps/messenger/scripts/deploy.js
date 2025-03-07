@@ -51,8 +51,8 @@ async function main() {
 
   // Create .env file for the web
   console.log("\nDeployment information:");
-  console.log(`NEXT_PUBLIC_CONTRACT_ADDRESS=${messenger.address}`);
-  console.log(`NEXT_PUBLIC_NETWORK=${network}`);
+  console.log(`CONTRACT_ADDRESS=${messenger.address}`);
+  console.log(`NETWORK=${network}`);
 
   // Output deployment summary
   console.log("\nDeployment summary:");
