@@ -1,41 +1,32 @@
 {
   "name": "messenger-dapp",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "compile": "hardhat compile",
+    "clean": "hardhat clean",
+    "dev": "hardhat node && npm run deploy:local",
+    "build": "npm run clean && npm run compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat ignition deploy ignition/modules/Messenger.ts --network sepolia"
   },
+  "keywords": [
+    "Web3",
+    "Next.js",
+    "Wagmi",
+    "RainbowKit",
+    "Hardhat",
+    "Solidity"
+  ],
+  "author": "Pavel Ars",
+  "license": "MIT",
+  "description": "A decentralized messaging application built with Next.js, Wagmi, RainbowKit, Hardhat and Solidity.",
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^2.2.4",
-    "@tanstack/react-query": "^5.66.9",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "dotenv": "^16.4.7",
-    "next": "^15.2.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.0.2",
-    "viem": "^2.23.5",
-    "wagmi": "^2.14.12"
+    "@nomicfoundation/hardhat-viem": "^2.0.6",
+    "viem": "^2.23.7"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4.0.9",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@typescript-eslint/eslint-plugin": "^8.26.0",
-    "@typescript-eslint/parser": "^8.26.0",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.7",
-    "eslint-config-prettier": "^10.0.2",
-    "postcss": "^8.5.3",
-    "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.0.9",
-    "typescript": "^5"
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "hardhat": "^2.22.19"
   }
 }
