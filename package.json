@@ -1,24 +1,32 @@
 {
   "name": "messenger-dapp",
-  "private": true,
+  "version": "1.0.0",
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "compile": "hardhat compile",
+    "clean": "hardhat clean",
+    "dev": "hardhat node && npm run deploy:local",
+    "build": "npm run clean && npm run compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat ignition deploy ignition/modules/Messenger.ts --network sepolia"
+  },
+  "keywords": [
+    "Web3",
+    "Next.js",
+    "Wagmi",
+    "RainbowKit",
+    "Hardhat",
+    "Solidity"
+  ],
+  "author": "Pavel Ars",
+  "license": "MIT",
+  "description": "A decentralized messaging application built with Next.js, Wagmi, RainbowKit, Hardhat and Solidity.",
+  "dependencies": {
+    "@nomicfoundation/hardhat-viem": "^2.0.6",
+    "viem": "^2.23.7"
   },
   "devDependencies": {
-    "prettier": "^3.5.3",
-    "turbo": "^2.4.4",
-    "typescript": "5.8.2"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "packageManager": "npm@10.8.3",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "hardhat": "^2.22.19"
+  }
 }

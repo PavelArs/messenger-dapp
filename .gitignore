@@ -1,41 +1,20 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.vscode
+.idea
 
-# Dependencies
 node_modules
-.pnp
-.pnp.js
-
-# Local env files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
-# Testing
-coverage
+# Hardhat files
+/cache
+/artifacts
 
-# Turbo
-.turbo
+# TypeChain files
+/typechain
+/typechain-types
 
-# Vercel
-.vercel
+# solidity-coverage files
+/coverage
+/coverage.json
 
-# Build Outputs
-.next/
-out/
-build
-dist
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Misc
-.DS_Store
-*.pem
-
-# IDE
-.vscode/
-.idea/
+# Hardhat Ignition default folder for deployments against a local node
+ignition/deployments/chain-31337

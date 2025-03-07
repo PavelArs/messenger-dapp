@@ -1,206 +1,50 @@
-# Messenger DApp (Monorepo)
+# Messenger DApp - Contracts Package
 
-A decentralized messaging application built with Next.js, Wagmi, RainbowKit, and Solidity, organized as a monorepo with
-separate packages for the web and smart contracts.
-
-## Project Structure
-
-This project is structured as a monorepo using npm workspaces:
-
-```
-messenger-dapp/
-├── packages/
-│   ├── contracts/    # Solidity smart contracts
-│   │   ├── contracts/
-│   │   ├── scripts/
-│   │   └── test/
-│   │
-│   └── web/         # Next.js web application
-│       ├── public/
-│       └── src/
-```
+This package contains the Solidity smart contracts for the Messenger DApp. It uses Hardhat for development, testing, and
+deployment.
 
 ## Features
 
-- Send and receive messages on the Ethereum blockchain
-- Filter messages by sent, received, or all
-- Real-time updates when messages are confirmed
-- Supports local development with Hardhat and testnets
-- Monorepo setup for better separation of concerns
+- Messenger smart contract for on-chain messaging
+- Hardhat for Ethereum development environment
+- Viem for type-safe Ethereum interactions
+- Hardhat Ignition for deployment
 
-## Installation
+## Available Scripts
 
-1. Clone the repository:
+```shell
+# Development
+npm run dev          # Start a local Hardhat node
+npm run node         # Alias for dev, starts a local Hardhat node
+npm run compile      # Compile contracts
+npm run clean        # Clean the build artifacts
+npm run build        # Clean and compile contracts
 
-```bash
-git clone https://github.com/your-username/messenger-dapp.git
-cd messenger-dapp
+# Testing
+npm run test         # Run tests
+
+# Deployment
+npm run deploy:local # Deploy to local network using Ignition
+npm run deploy       # Deploy using scripts/deploy.js
 ```
 
-2. Install dependencies (this will install dependencies for all packages):
+## Repository Structure
 
-```bash
-npm install
-```
-
-3. Set up your environment variables:
-
-```bash
-cp .env.example .env.local
-```
-
-Then edit `.env.local` with your own values for API keys.
+- `/contracts`: Smart contract source files
+- `/test`: Test files for contracts
+- `/ignition`: Hardhat Ignition deployment modules
+- `/scripts`: Deployment scripts
 
 ## Local Development
 
-You can run both the web and smart contract environments with a single command from the root directory:
+1. Start the local Hardhat node:
+   ```
+   npm run dev
+   ```
 
-```bash
-npm run dev
-```
+2. In a separate terminal, deploy the contracts:
+   ```
+   npm run deploy:local
+   ```
 
-This will:
-
-- Start the Hardhat node (local blockchain)
-- Start the Next.js development server
-
-To deploy contracts to the local network:
-
-```bash
-npm run deploy:local
-```
-
-This will:
-
-- Deploy the Messenger contract to your local Hardhat network
-- Generate contract integration files for the web
-
-Finally, open [http://localhost:3000](http://localhost:3000) with your browser.
-
-### Setting Environment Variables
-
-Set the environment to local in your `.env.local` file:
-
-```
-NEXT_PUBLIC_NETWORK=local
-```
-
-## Development Workflow
-
-### Available Scripts
-
-All commands can be run from the root directory:
-
-```bash
-# Development
-npm run dev                # Run both web and contracts in development mode
-npm run dev:web       # Run only web in development mode
-npm run dev:contracts      # Run only contracts (Hardhat node)
-
-# Building
-npm run build              # Build both contracts and web
-npm run build:web     # Build only web
-npm run build:contracts    # Build only contracts
-
-# Testing
-npm run test               # Run all tests
-npm run test:contracts     # Run contract tests
-
-# Deployment
-npm run deploy:local       # Deploy contracts to local network
-```
-
-### Working with Contracts Package
-
-Navigate to the contracts package for more specialized commands:
-
-```bash
-cd packages/contracts
-
-# Compile contracts
-npm run compile
-
-# Run contract tests
-npm run test
-
-# Clean artifacts
-npm run clean
-
-# Deploy to local network
-npm run deploy:local
-
-# Deploy using scripts/deploy.js
-npm run deploy
-```
-
-### Working with web Package
-
-Navigate to the web package for specialized commands:
-
-```bash
-cd packages/web
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm run start
-
-# Run linting
-npm run lint
-
-# Type checking
-npm run typecheck
-
-# Format code
-npm run format
-```
-
-## Using a Test Network
-
-1. Update your `.env.local` to use a testnet (Sepolia):
-
-```
-NEXT_PUBLIC_NETWORK=testnet
-NEXT_PUBLIC_ALCHEMY_API_KEY=your_alchemy_api_key
-NEXT_PUBLIC_ALCHEMY_PROJECT_ID=your_alchemy_project_id
-PRIVATE_KEY=your_wallet_private_key
-```
-
-2. Deploy to the Sepolia testnet:
-
-```bash
-npm run deploy:sepolia
-```
-
-This will:
-
-- Deploy the contract to the Sepolia testnet
-- Generate contract integration files for the web with the new address
-
-## Smart Contract Functions
-
-The Messenger contract provides these main functions:
-
-- `sendMessage(address _receiver, string memory _content)`: Send a message to an address
-- `getReceivedMessages()`: Get all messages received by the caller
-- `getSentMessages()`: Get all messages sent by the caller
-- `getAllMessages()`: Get all messages (both sent and received) for the caller
-
-## Technologies
-
-This project uses:
-
-- **Monorepo Structure**: npm workspaces for managing multiple packages
-- **Smart Contracts**: Solidity and Hardhat for contract development
-- **Contract Deployment**: Hardhat Ignition for deterministic deployments
-- **web**: Next.js 15 with the App Router and Turbopack
-- **Blockchain Integration**: Wagmi v2 and Viem for type-safe Ethereum interactions
-- **Wallet Connection**: RainbowKit v2 for wallet connections
-- **State Management**: TanStack Query for data fetching and caching
-- **Styling**: Tailwind CSS for utility-first styling
-- **Type Safety**: TypeScript throughout the project
-- **Dev Experience**: ESLint and Prettier for code quality
+3. The compiled contract artifacts will be automatically copied to the web package.
