@@ -17,10 +17,7 @@ export function ContextProviders({ children, cookies }: Props) {
     const initialState = cookieToInitialState(getConfig(), cookies);
 
     return (
-        <WagmiProvider
-            config={config}
-            {...(initialState ? { initialState } : {})}
-        >
+        <WagmiProvider config={config} initialState={initialState}>
             <QueryClientProvider client={queryClient}>
                 <RainbowKitProvider locale="en">{children}</RainbowKitProvider>
             </QueryClientProvider>

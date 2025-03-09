@@ -17,12 +17,10 @@ export default function ContactsList({
     selectedContact,
     onSelectContact,
 }: ContactsListProps) {
-    // Format Ethereum address for display
     const formatAddress = (address: string) => {
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     };
 
-    // Get avatar letter from address
     const getAvatarLetter = (address: string) => {
         return address.substring(2, 3).toUpperCase();
     };
@@ -36,9 +34,7 @@ export default function ContactsList({
                         <div
                             key={contact.address}
                             className={`${styles.contactCard} ${
-                                selectedContact === contact.address
-                                    ? styles.active
-                                    : ''
+                                selectedContact === contact.address ? styles.active : ''
                             }`}
                             onClick={() => onSelectContact(contact.address)}
                         >

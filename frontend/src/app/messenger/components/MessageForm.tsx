@@ -23,7 +23,7 @@ export default function MessageForm({
 
         try {
             await onSendMessage(messageContent);
-            setMessageContent(''); // Clear after successful send
+            setMessageContent('');
         } catch (error) {
             console.error('Failed to send message:', error);
         }
@@ -41,9 +41,7 @@ export default function MessageForm({
                         type="text"
                         id="receiver"
                         value={receiverAddress}
-                        onChange={(e) =>
-                            onReceiverAddressChange(e.target.value)
-                        }
+                        onChange={(e) => onReceiverAddressChange(e.target.value)}
                         placeholder="0x..."
                         className={styles.input}
                         required

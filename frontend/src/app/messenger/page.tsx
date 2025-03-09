@@ -5,9 +5,9 @@ import { useAccount, useReadContract, useWriteContract } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import styles from './messenger.module.css';
 import { ChatWindow, ContactsList, EmptyState, MessageForm } from './components';
-import { useContractRead } from '@/app/messenger/hooks';
+import MessengerContract from '@/contracts/Messenger.json';
 
-export default function Messenger() {
+export default function Home() {
     const [receiverAddress, setReceiverAddress] = useState('');
     const [selectedContact, setSelectedContact] = useState<string | null>(null);
 
@@ -15,22 +15,26 @@ export default function Messenger() {
     const { writeContractAsync } = useWriteContract();
 
     // Get all contacts
-    const { data: contactAddresses, refetch: refetchContacts } = useReadContract({
+    const { data: contactAddresses } = useReadContract({
         address: MessengerContract.address as `0x${string}`,
         abi: MessengerContract.abi,
         functionName: 'getContacts',
         account: address,
     });
 
-    const { data: sentMessages } = useContractRead(
-        'getSentMessages',
-        selectedContact ? [selectedContact] : undefined
-    );
+    const { data: sentMessages, refetch: refetchSent } = useReadContract({
+        address: MessengerContract.address as `0x${string}`,
+        abi: MessengerContract.abi,
+        functionName: 'getSentMessages',
+        account: address,
+    });
 
-    const { data: receivedMessages } = useContractRead(
-        'getReceivedMessages',
-        selectedContact ? [selectedContact] : undefined
-    );
+    const { data: receivedMessages, refetch: refetchContacts } = useReadContract({
+        address: MessengerContract.address as `0x${string}`,
+        abi: MessengerContract.abi,
+        functionName: 'getReceivedMessages',
+        account: address,
+    });
 
     // Handle sending a new message (from the form)
     const handleSendMessage = async (content: string) => {

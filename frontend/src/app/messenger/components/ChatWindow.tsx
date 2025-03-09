@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import styles from '../messenger.module.css';
-import { Message } from '@/app/messenger/types';
 
 type ChatWindowProps = {
     currentUserAddress: string;
@@ -19,17 +18,14 @@ export default function ChatWindow({
 }: ChatWindowProps) {
     const [quickReply, setQuickReply] = useState('');
 
-    // Format Ethereum address for display
     const formatAddress = (address: string) => {
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     };
 
-    // Get avatar letter from address
     const getAvatarLetter = (address: string) => {
         return address.substring(2, 3).toUpperCase();
     };
 
-    // Format timestamps to a readable date
     const formatTimestamp = (timestamp: bigint) => {
         return new Date(Number(timestamp) * 1000).toLocaleString();
     };
@@ -41,7 +37,7 @@ export default function ChatWindow({
 
         try {
             await onSendReply(quickReply);
-            setQuickReply(''); // Clear after successful send
+            setQuickReply('');
         } catch (error) {
             console.error('Failed to send quick reply:', error);
         }
@@ -50,16 +46,10 @@ export default function ChatWindow({
     return (
         <section className={styles.messagesSection}>
             <div className={styles.dialogHeader}>
-                <div className={styles.dialogAvatar}>
-                    {getAvatarLetter(selectedContact)}
-                </div>
+                <div className={styles.dialogAvatar}>{getAvatarLetter(selectedContact)}</div>
                 <div className={styles.dialogInfo}>
-                    <div className={styles.dialogAddress}>
-                        {formatAddress(selectedContact)}
-                    </div>
-                    <div className={styles.dialogStatus}>
-                        {messages.length} messages
-                    </div>
+                    <div className={styles.dialogAddress}>{formatAddress(selectedContact)}</div>
+                    <div className={styles.dialogStatus}>{messages.length} messages</div>
                 </div>
             </div>
 
@@ -69,8 +59,7 @@ export default function ChatWindow({
                         <div
                             key={`${message.sender}-${message.recipient}-${message.timestamp}-${index}`}
                             className={`${styles.messageCard} ${
-                                message.sender.toLowerCase() ===
-                                currentUserAddress?.toLowerCase()
+                                message.sender.toLowerCase() === currentUserAddress?.toLowerCase()
                                     ? styles.sentMessage
                                     : styles.receivedMessage
                             }`}
@@ -80,15 +69,11 @@ export default function ChatWindow({
                                     {formatTimestamp(message.timestamp)}
                                 </span>
                             </div>
-                            <p className={styles.messageContent}>
-                                {message.content}
-                            </p>
+                            <p className={styles.messageContent}>{message.content}</p>
                         </div>
                     ))
                 ) : (
-                    <p className={styles.noMessages}>
-                        No messages with this contact yet.
-                    </p>
+                    <p className={styles.noMessages}>No messages with this contact yet.</p>
                 )}
             </div>
 

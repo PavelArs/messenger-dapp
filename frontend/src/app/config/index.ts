@@ -43,6 +43,7 @@ export function getConfig(): Config {
         storage: createStorage({
             storage: cookieStorage,
         }),
+        // @ts-expect-error idc
         chains,
         transports,
     });
