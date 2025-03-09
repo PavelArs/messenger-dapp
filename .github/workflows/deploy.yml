@@ -1,0 +1,98 @@
+name: Deploy Application
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Update Next.js config for GitHub Pages
+        working-directory: ./frontend
+        run: |
+          cat > next.config.mjs << 'EOF'
+          /** @type {import('next').NextConfig} */
+          const nextConfig = {
+            output: 'export', // Enable static exports
+            basePath: process.env.NODE_ENV === 'production' ? '/messenger-dapp' : '',
+            images: { unoptimized: true },
+          };
+          
+          export default nextConfig;
+          EOF
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Create .nojekyll file
+        run: touch ./frontend/out/.nojekyll
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ./frontend/out
+          branch: gh-pages
+
+  deploy-contract:
+    runs-on: ubuntu-latest
+    needs: deploy-frontend
+    if: github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create .env file
+        run: |
+          echo "PRIVATE_KEY=${{ secrets.DEPLOYER_PRIVATE_KEY }}" > .env
+          echo "ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }}" >> .env
+          echo "ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }}" >> .env
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Deploy to Sepolia
+        run: npx hardhat run scripts/deploy.js --network sepolia
+
+      - name: Update contract addresses in frontend
+        run: |
+          mkdir -p ./frontend/src/contracts
+          cp -f ./ignition/deployments/chain-11155111/deployed_addresses.json ./frontend/src/contracts/contract-address.json
+          cp -f ./artifacts/contracts/Messenger.sol/Messenger.json ./frontend/src/contracts/Messenger.json
+
+      - name: Commit and push contract updates
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update contract addresses from deployment"
+          file_pattern: frontend/src/contracts/*
