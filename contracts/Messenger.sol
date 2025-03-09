@@ -51,6 +51,7 @@ contract Messenger {
 
         // Add contact relationship if not already recorded
         _addContact(msg.sender, _to);
+        _addContact(_to, msg.sender);
 
         emit MessageSent(msg.sender, _to, messageId, block.timestamp);
     }

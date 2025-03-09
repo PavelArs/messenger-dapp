@@ -3,15 +3,9 @@
 import { useMemo, useState } from 'react';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import MessengerABI from '../../contracts/Messenger.json';
-import ContractAddress from '../../contracts/contract-address.json';
 import styles from './messenger.module.css';
-import {
-    ChatWindow,
-    ContactsList,
-    EmptyState,
-    MessageForm,
-} from './components';
+import { ChatWindow, ContactsList, EmptyState, MessageForm } from './components';
+import { useContractRead } from '@/app/messenger/hooks';
 
 export default function Messenger() {
     const [receiverAddress, setReceiverAddress] = useState('');
@@ -21,34 +15,22 @@ export default function Messenger() {
     const { writeContractAsync } = useWriteContract();
 
     // Get all contacts
-    const { data: contactAddresses, refetch: refetchContacts } =
-        useReadContract({
-            address: ContractAddress.Messenger as `0x${string}`,
-            abi: MessengerABI.abi,
-            functionName: 'getContacts',
-            enabled: isConnected,
-            account: address,
-        });
-
-    // For the selected contact conversation
-    const { data: sentMessages, refetch: refetchSent } = useReadContract({
-        address: ContractAddress.Messenger as `0x${string}`,
-        abi: MessengerABI.abi,
-        functionName: 'getSentMessages',
-        args: [selectedContact as `0x${string}`],
-        enabled: isConnected && !!selectedContact,
+    const { data: contactAddresses, refetch: refetchContacts } = useReadContract({
+        address: MessengerContract.address as `0x${string}`,
+        abi: MessengerContract.abi,
+        functionName: 'getContacts',
         account: address,
     });
 
-    const { data: receivedMessages, refetch: refetchReceived } =
-        useReadContract({
-            address: ContractAddress.Messenger as `0x${string}`,
-            abi: MessengerABI.abi,
-            functionName: 'getReceivedMessages',
-            args: [selectedContact as `0x${string}`],
-            enabled: isConnected && !!selectedContact,
-            account: address,
-        });
+    const { data: sentMessages } = useContractRead(
+        'getSentMessages',
+        selectedContact ? [selectedContact] : undefined
+    );
+
+    const { data: receivedMessages } = useContractRead(
+        'getReceivedMessages',
+        selectedContact ? [selectedContact] : undefined
+    );
 
     // Handle sending a new message (from the form)
     const handleSendMessage = async (content: string) => {
@@ -56,8 +38,8 @@ export default function Messenger() {
 
         try {
             await writeContractAsync({
-                address: ContractAddress.Messenger as `0x${string}`,
-                abi: MessengerABI.abi,
+                address: MessengerContract.address as `0x${string}`,
+                abi: MessengerContract.abi,
                 functionName: 'sendMessage',
                 args: [receiverAddress, content],
             });
@@ -83,8 +65,8 @@ export default function Messenger() {
 
         try {
             await writeContractAsync({
-                address: ContractAddress.Messenger as `0x${string}`,
-                abi: MessengerABI.abi,
+                address: MessengerContract.address as `0x${string}`,
+                abi: MessengerContract.abi,
                 functionName: 'sendMessage',
                 args: [selectedContact, content],
             });

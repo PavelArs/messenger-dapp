@@ -8,7 +8,10 @@
     "dev": "hardhat node && npm run deploy:local",
     "build": "npm run clean && npm run compile",
     "test": "hardhat test",
-    "deploy:local": "hardhat ignition deploy ignition/modules/Messenger.ts --network local",
+    "coverage": "hardhat coverage",
+    "postinstall": "typechain",
+    "typecheck": "tsc --noEmit",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
     "deploy:sepolia": "hardhat ignition deploy ignition/modules/Messenger.ts --network sepolia"
   },
   "keywords": [
@@ -28,6 +31,7 @@
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.12",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.13",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "@nomiclabs/hardhat-etherscan": "^3.1.8",
     "@typechain/ethers-v6": "^0.5.1",

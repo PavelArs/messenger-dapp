@@ -140,7 +140,7 @@ describe("Messenger", function () {
         .sendMessage(user1.address, "From user2 to user1");
     });
 
-    it("should retrieve sent messages correctly"'From user2 to user1'
+    it("should retrieve sent messages correctly 'From user2 to user1'", async function () {
       // Get messages sent by user1 to user2
       const sentMessages = await messenger
         .connect(user1)
@@ -150,8 +150,8 @@ describe("Messenger", function () {
       expect(sentMessages.length).to.equal(2);
 
       // Check message content
-      expect(sentMessages[0].content).to.equal('To user2: Message 1');
-      expect(sentMessages[1].content).to.equal('To user2: Message 2');
+      expect(sentMessages[0].content).to.equal("T'To user2: Message 1'
+      expect(sentMessages[1].content).to.equal("T'To user2: Message 2'
 
       // Check sender and recipient
       expect(sentMessages[0].sender).to.equal(user1.address);

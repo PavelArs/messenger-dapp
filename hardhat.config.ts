@@ -1,6 +1,9 @@
 import "@typechain/hardhat";
 import "@nomicfoundation/hardhat-ethers";
 import "@nomicfoundation/hardhat-chai-matchers";
+import "@nomicfoundation/hardhat-verify";
+import "@nomicfoundation/hardhat-ignition";
+import "solidity-coverage";
 
 import { HardhatUserConfig } from "hardhat/types";
 import { vars } from "hardhat/config";
@@ -36,7 +39,9 @@ const config: HardhatUserConfig = {
     target: "ethers-v6",
   },
   etherscan: {
-    apiKey: ETHERSCAN_API_KEY,
+    apiKey: {
+      sepolia: ETHERSCAN_API_KEY,
+    },
   },
 };
 
