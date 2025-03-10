@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
-import { useAccount, useReadContract, useWriteContract } from 'wagmi';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import styles from './messenger.module.css';
-import { ChatWindow, ContactsList, EmptyState, MessageForm } from './components';
-import MessengerContract from '@/contracts/Messenger.json';
+import { useMemo, useState } from "react";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import styles from "./messenger.module.css";
+import { ChatWindow, ContactsList, EmptyState, MessageForm } from "./components";
+import MessengerContract from "@/contracts/Messenger.json";
 
 export default function Home() {
-    const [receiverAddress, setReceiverAddress] = useState('');
+    const [receiverAddress, setReceiverAddress] = useState("");
     const [selectedContact, setSelectedContact] = useState<string | null>(null);
 
     const { address, isConnected } = useAccount();
@@ -18,21 +18,21 @@ export default function Home() {
     const { data: contactAddresses } = useReadContract({
         address: MessengerContract.address as `0x${string}`,
         abi: MessengerContract.abi,
-        functionName: 'getContacts',
+        functionName: "getContacts",
         account: address,
     });
 
     const { data: sentMessages, refetch: refetchSent } = useReadContract({
         address: MessengerContract.address as `0x${string}`,
         abi: MessengerContract.abi,
-        functionName: 'getSentMessages',
+        functionName: "getSentMessages",
         account: address,
     });
 
     const { data: receivedMessages, refetch: refetchContacts } = useReadContract({
         address: MessengerContract.address as `0x${string}`,
         abi: MessengerContract.abi,
-        functionName: 'getReceivedMessages',
+        functionName: "getReceivedMessages",
         account: address,
     });
 
@@ -44,7 +44,7 @@ export default function Home() {
             await writeContractAsync({
                 address: MessengerContract.address as `0x${string}`,
                 abi: MessengerContract.abi,
-                functionName: 'sendMessage',
+                functionName: "sendMessage",
                 args: [receiverAddress, content],
             });
 
@@ -59,7 +59,7 @@ export default function Home() {
             // Update contacts list
             refetchContacts();
         } catch (error) {
-            console.error('Failed to send message:', error);
+            console.error("Failed to send message:", error);
         }
     };
 
@@ -71,7 +71,7 @@ export default function Home() {
             await writeContractAsync({
                 address: MessengerContract.address as `0x${string}`,
                 abi: MessengerContract.abi,
-                functionName: 'sendMessage',
+                functionName: "sendMessage",
                 args: [selectedContact, content],
             });
 
@@ -79,7 +79,7 @@ export default function Home() {
             refetchSent();
             refetchContacts();
         } catch (error) {
-            console.error('Failed to send quick reply:', error);
+            console.error("Failed to send quick reply:", error);
         }
     };
 
@@ -137,7 +137,7 @@ export default function Home() {
                         />
 
                         <div
-                            className={`${styles.layout} ${contacts.length > 0 ? styles.twoColumnLayout : ''}`}
+                            className={`${styles.layout} ${contacts.length > 0 ? styles.twoColumnLayout : ""}`}
                         >
                             {contacts.length > 0 && (
                                 <div className={styles.sidebarColumn}>
@@ -152,7 +152,7 @@ export default function Home() {
                             <div className={styles.mainColumn}>
                                 {selectedContact ? (
                                     <ChatWindow
-                                        currentUserAddress={address || ''}
+                                        currentUserAddress={address || ""}
                                         selectedContact={selectedContact}
                                         messages={dialogMessages}
                                         onSendReply={handleQuickReply}

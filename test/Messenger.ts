@@ -1,7 +1,7 @@
-import { expect } from 'chai';
-import { ethers } from 'hardhat';
-import { Messenger } from '../typechain-types';
-import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { Messenger } from "../typechain-types";
+import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
 describe("Messenger", function () {
   let messenger: Messenger;
@@ -150,8 +150,8 @@ describe("Messenger", function () {
       expect(sentMessages.length).to.equal(2);
 
       // Check message content
-      expect(sentMessages[0].content).to.equal("T'To user2: Message 1'
-      expect(sentMessages[1].content).to.equal("T'To user2: Message 2'
+      expect(sentMessages[0].content).to.equal("To user2: Message 1");
+      expect(sentMessages[1].content).to.equal("To user2: Message 2");
 
       // Check sender and recipient
       expect(sentMessages[0].sender).to.equal(user1.address);

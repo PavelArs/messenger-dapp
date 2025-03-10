@@ -5,11 +5,11 @@
   "scripts": {
     "compile": "hardhat compile",
     "clean": "hardhat clean",
-    "dev": "hardhat node && npm run deploy:local",
+    "node": "hardhat node",
     "build": "npm run clean && npm run compile",
     "test": "hardhat test",
     "coverage": "hardhat coverage",
-    "postinstall": "typechain",
+    "postcompile": "typechain --target ethers-v6",
     "typecheck": "tsc --noEmit",
     "deploy:local": "hardhat run scripts/deploy.js --network localhost",
     "deploy:sepolia": "hardhat ignition deploy ignition/modules/Messenger.ts --network sepolia"
