@@ -42,7 +42,7 @@ export default function Home() {
         abi: MessengerContract.abi,
         functionName: "getReceivedMessages",
         account: address,
-        args: [selectedContac],
+        args: [selectedContact],
     });
 
     // Handle sending a new message (from the form)
