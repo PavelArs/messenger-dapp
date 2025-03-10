@@ -7,6 +7,13 @@ import styles from "./messenger.module.css";
 import { ChatWindow, ContactsList, EmptyState, MessageForm } from "./components";
 import MessengerContract from "@/contracts/Messenger.json";
 
+type Message = {
+    sender: string;
+    receiver: string;
+    content: string;
+    timestamp: bigint;
+};
+
 export default function Home() {
     const [receiverAddress, setReceiverAddress] = useState("");
     const [selectedContact, setSelectedContact] = useState<string | null>(null);
@@ -27,6 +34,7 @@ export default function Home() {
         abi: MessengerContract.abi,
         functionName: "getSentMessages",
         account: address,
+        args: [selectedontact],
     });
 
     const { data: receivedMessages, refetch: refetchContacts } = useReadContract({
@@ -34,6 +42,7 @@ export default function Home() {
         abi: MessengerContract.abi,
         functionName: "getReceivedMessages",
         account: address,
+        args: [selectedContac],
     });
 
     // Handle sending a new message (from the form)
@@ -100,7 +109,7 @@ export default function Home() {
     };
 
     // Combined and sorted messages for the dialog view
-    const dialogMessages = useMemo(() => {
+    const dialogMessages: Message[] = useMemo(() => {
         if (!sentMessages && !receivedMessages) return [];
 
         return [...(sentMessages || []), ...(receivedMessages || [])]
