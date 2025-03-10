@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import styles from '../messenger.module.css';
+import styles from "../messenger.module.css";
 
 type Contact = {
     address: string;
@@ -34,7 +34,7 @@ export default function ContactsList({
                         <div
                             key={contact.address}
                             className={`${styles.contactCard} ${
-                                selectedContact === contact.address ? styles.active : ''
+                                selectedContact === contact.address ? styles.active : ""
                             }`}
                             onClick={() => onSelectContact(contact.address)}
                         >

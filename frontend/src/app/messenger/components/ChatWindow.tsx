@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import styles from '../messenger.module.css';
+import { useState } from "react";
+import styles from "../messenger.module.css";
 
 type ChatWindowProps = {
     currentUserAddress: string;
@@ -16,7 +16,7 @@ export default function ChatWindow({
     messages,
     onSendReply,
 }: ChatWindowProps) {
-    const [quickReply, setQuickReply] = useState('');
+    const [quickReply, setQuickReply] = useState("");
 
     const formatAddress = (address: string) => {
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
@@ -37,9 +37,9 @@ export default function ChatWindow({
 
         try {
             await onSendReply(quickReply);
-            setQuickReply('');
+            setQuickReply("");
         } catch (error) {
-            console.error('Failed to send quick reply:', error);
+            console.error("Failed to send quick reply:", error);
         }
     };
 

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
     const router = useRouter();
@@ -12,7 +12,7 @@ export default function Home() {
     }, []);
 
     const navigateToMessenger = () => {
-        router.push('/messenger');
+        router.push("/messenger");
     };
 
     return (
@@ -22,9 +22,7 @@ export default function Home() {
             </div>
 
             <div className="home-content">
-                <p className="text-lg">
-                    A decentralized messaging application built on Ethereum
-                </p>
+                <p className="text-lg">A decentralized messaging application built on Ethereum</p>
 
                 <div className="features-list">
                     <h2 className="text-xl font-semibold mb-4">Features:</h2>
@@ -37,10 +35,7 @@ export default function Home() {
                 </div>
 
                 {isClient && (
-                    <button
-                        className="messenger-button text-lg"
-                        onClick={navigateToMessenger}
-                    >
+                    <button className="messenger-button text-lg" onClick={navigateToMessenger}>
                         Open Messenger App
                     </button>
                 )}

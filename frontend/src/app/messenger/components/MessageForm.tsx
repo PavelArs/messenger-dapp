@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import styles from '../messenger.module.css';
+import { useState } from "react";
+import styles from "../messenger.module.css";
 
 type MessageFormProps = {
     receiverAddress: string;
@@ -14,7 +14,7 @@ export default function MessageForm({
     onReceiverAddressChange,
     onSendMessage,
 }: MessageFormProps) {
-    const [messageContent, setMessageContent] = useState('');
+    const [messageContent, setMessageContent] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,9 +23,9 @@ export default function MessageForm({
 
         try {
             await onSendMessage(messageContent);
-            setMessageContent('');
+            setMessageContent("");
         } catch (error) {
-            console.error('Failed to send message:', error);
+            console.error("Failed to send message:", error);
         }
     };
 

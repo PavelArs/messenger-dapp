@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import styles from '../messenger.module.css';
+import styles from "../messenger.module.css";
 
 type EmptyStateProps = {
     title?: string;
@@ -8,8 +8,8 @@ type EmptyStateProps = {
 };
 
 export default function EmptyState({
-    title = 'Select a Contact',
-    message = 'Choose a contact from the sidebar to start messaging',
+    title = "Select a Contact",
+    message = "Choose a contact from the sidebar to start messaging",
 }: EmptyStateProps) {
     return (
         <div className={styles.emptyStateContainer}>
