@@ -34,7 +34,7 @@ export default function Home() {
         abi: MessengerContract.abi,
         functionName: "getSentMessages",
         account: address,
-        args: [selectedontact],
+        args: [selectedContact],
     });
 
     const { data: receivedMessages, refetch: refetchContacts } = useReadContract({
