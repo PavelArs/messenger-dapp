@@ -31,8 +31,7 @@ The Messenger smart contract provides:
 
 ```shell
 # Development
-npm run dev          # Start a local Hardhat node
-npm run node         # Alias for dev, starts a local Hardhat node
+npm run node         # Start a local Hardhat node
 npm run compile      # Compile contracts
 npm run clean        # Clean the build artifacts
 npm run build        # Clean and compile contracts
@@ -69,7 +68,7 @@ The smart contracts are deployed to:
 
 3. Start the local Hardhat node:
    ```
-   npm run dev
+   npm run node
    ```
 
 4. In a separate terminal, deploy the contracts locally:
@@ -96,7 +95,7 @@ The smart contracts are deployed to:
 
 - **Smart Contracts**: Solidity, Hardhat, Ethers.js
 - **Frontend**: Next.js, Wagmi, Viem, RainbowKit, React
-- **Testing**: Hardhat Testing Framework
+- **Testing**: Mocha, Chai
 - **Deployment**: Hardhat Ignition
 
 ## License
