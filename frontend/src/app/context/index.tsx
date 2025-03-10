@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { getConfig } from '../config';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { cookieToInitialState, WagmiProvider } from 'wagmi';
-import { type ReactNode, useState } from 'react';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { getConfig } from "../config";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { cookieToInitialState, WagmiProvider } from "wagmi";
+import { type ReactNode, useState } from "react";
+import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
 type Props = {
     children: ReactNode;
@@ -17,10 +17,7 @@ export function ContextProviders({ children, cookies }: Props) {
     const initialState = cookieToInitialState(getConfig(), cookies);
 
     return (
-        <WagmiProvider
-            config={config}
-            {...(initialState ? { initialState } : {})}
-        >
+        <WagmiProvider config={config} initialState={initialState}>
             <QueryClientProvider client={queryClient}>
                 <RainbowKitProvider locale="en">{children}</RainbowKitProvider>
             </QueryClientProvider>

@@ -25,6 +25,12 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@/contracts/*": [
+        "./src/contracts/*"
+      ],
+      "@/contracts/types": [
+        "./src/contracts/typechain-types"
       ]
     }
   },

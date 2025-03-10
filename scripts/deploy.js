@@ -1,85 +1,75 @@
-const { formatEther } = require('viem');
-const hre = require('hardhat');
-const { vars } = require('hardhat/config');
-const { join } = require('path');
-const { artifacts } = require('hardhat');
+const fs = require("fs");
+const path = require("path");
+const { ethers, network } = require("hardhat");
 
 async function main() {
-  const network = hre.network.name;
-  console.log(`Deploying to ${network}...`);
+  const ContractFactory = await ethers.getContractFactory("Messenger");
 
-  const [deployer] = await hre.viem.getWalletClients();
-  const deployerAddress = deployer.account.address;
+  console.log("Deploying contract...");
+  const contract = await ContractFactory.deploy();
+  await contract.waitForDeployment();
 
-  const publicClient = await hre.viem.getPublicClient();
-  const balance = await publicClient.getBalance({ address: deployerAddress });
+  const contractAddress = await contract.getAddress();
+  console.log(`Contract deployed to: ${contractAddress}`);
 
-  console.log(`Deploying from: ${deployerAddress}`);
-  console.log(`Account balance: ${formatEther(balance)} ETH`);
+  const networkName = network.name;
+  console.log(`Network: ${networkName}`);
 
-  console.log('\nDeploying Messenger contract...');
-  const messenger = await hre.viem.deployContract('Messenger');
-
-  console.log(`Messenger contract deployed to: ${messenger.address}`);
-  console.log('Waiting for confirmations...');
-
-  if (network !== 'localhost' && network !== 'hardhat') {
-    // TODO TypeError: Cannot read properties of undefined (reading 'hash') on sepolia deploy
-    await publicClient.waitForTransactionReceipt({
-      hash: messenger.deploymentTransaction.hash,
-      confirmations: 5
-    });
-    console.log('Confirmed with 5 blocks!');
-
-    if (vars.get('ETHERSCAN_API_KEY')) {
-      console.log('\nVerifying contract on Etherscan...');
-      try {
-        await hre.run('verify:verify', {
-          address: messenger.address,
-          constructorArguments: []
-        });
-        console.log('Contract verified on Etherscan!');
-      } catch (error) {
-        console.log('Error verifying contract:', error.message);
-      }
-    }
+  const frontendContractsDir = path.join(
+    __dirname,
+    "../frontend/src/contracts",
+  );
+  if (!fs.existsSync(frontendContractsDir)) {
+    fs.mkdirSync(frontendContractsDir, { recursive: true });
   }
 
-  saveFrontendFiles(messenger);
-
-  console.log('\nDeployment summary:');
-  console.log(`- Network: ${network}`);
-  console.log(`- Contract address: ${messenger.address}`);
-  console.log(`- Deployer address: ${deployerAddress}`);
-  console.log(
-    `- Transaction hash: ${messenger.deploymentTransaction?.hash || 'N/A'}`
+  const artifactPath = path.join(
+    __dirname,
+    `../artifacts/contracts/Messenger.sol/Messenger.json`,
   );
+
+  const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
+
+  const deploymentData = {
+    address: contractAddress,
+    abi: artifact.abi,
+  };
+
+  fs.writeFileSync(
+    path.join(frontendContractsDir, "Messenger.json"),
+    JSON.stringify(deploymentData, null, 2),
+  );
+
+  const typechainSource = path.join(__dirname, "../typechain-types");
+  const typechainDest = path.join(frontendContractsDir, "typechain-types");
+
+  copyDirectoryRecursive(typechainSource, typechainDest);
+
+  console.log("Deployment complete! Contract artifacts copied to frontend.");
 }
 
-function saveFrontendFiles(messenger) {
-  const fs = require('fs');
-  const contractsDir = join(__dirname, '..', 'frontend', 'src', 'contracts');
-
-  if (!fs.existsSync(contractsDir)) {
-    fs.mkdirSync(contractsDir);
+function copyDirectoryRecursive(source, destination) {
+  if (!fs.existsSync(destination)) {
+    fs.mkdirSync(destination, { recursive: true });
   }
 
-  fs.writeFileSync(
-    join(contractsDir, 'contract-address.json'),
-    JSON.stringify({ Messenger: messenger.address }, undefined, 2)
-  );
+  const entries = fs.readdirSync(source, { withFileTypes: true });
 
-  const MessengerArtifact = artifacts.readArtifactSync('Messenger');
+  for (const entry of entries) {
+    const sourcePath = path.join(source, entry.name);
+    const destPath = path.join(destination, entry.name);
 
-  fs.writeFileSync(
-    join(contractsDir, 'Messenger.json'),
-    JSON.stringify(MessengerArtifact, null, 2)
-  );
+    if (entry.isDirectory()) {
+      copyDirectoryRecursive(sourcePath, destPath);
+    } else {
+      fs.copyFileSync(sourcePath, destPath);
+    }
+  }
 }
 
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-    console.error(error);
+    console.error("Deployment failed:", error);
     process.exit(1);
   });
