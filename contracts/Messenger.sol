@@ -74,8 +74,8 @@ contract Messenger {
             _otherParty
         );
         uint256[] storage messageIds = _conversationToMessageIds[
-                    conversationHash
-            ];
+            conversationHash
+        ];
 
         if (messageIds.length == 0) {
             return new Message[](0);
@@ -120,11 +120,11 @@ contract Messenger {
     ) private pure returns (bytes32) {
         return
             keccak256(
-            abi.encodePacked(
-                _addr1 < _addr2 ? _addr1 : _addr2,
-                _addr1 < _addr2 ? _addr2 : _addr1
-            )
-        );
+                abi.encodePacked(
+                    _addr1 < _addr2 ? _addr1 : _addr2,
+                    _addr1 < _addr2 ? _addr2 : _addr1
+                )
+            );
     }
 
     /**
