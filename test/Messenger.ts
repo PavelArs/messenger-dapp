@@ -9,7 +9,8 @@ describe("Messenger Contract", function () {
     const [owner, addr1, addr2] = await hre.viem.getWalletClients();
     const publicClient = await hre.viem.getPublicClient();
 
-    const { messenger } = await hre.ignition.deploy(MessengerModule);
+    const { messenger }: { messenger: { address: `0x${string}` } } =
+      await hre.ignition.deploy(MessengerModule);
 
     const messengerContract = await hre.viem.getContractAt(
       "Messenger",
@@ -134,7 +135,7 @@ describe("Messenger Contract", function () {
 
       // Send messages
       await messengerContract.write.sendMessage([addr1.address, content1], {
-        account: owne,
+        account: owner,
       });
       await messengerContract.write.sendMessage([owner.address, content2], {
         account: addr1,
@@ -183,7 +184,7 @@ describe("Messenger Contract", function () {
         account: owner,
       });
       await messengerContract.write.sendMessage([addr1.address, "Msg3"], {
-        account: owne,
+        account: owner,
       }); // Duplicate contact
 
       const contacts = await messengerContract.read.getContacts({
@@ -202,7 +203,7 @@ describe("Messenger Contract", function () {
       );
 
       await messengerContract.write.sendMessage([addr1.address, "Hi"], {
-        account: owne,
+        account: owner,
       });
 
       const ownerContacts = await messengerContract.read.getContacts({
