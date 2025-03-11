@@ -9,8 +9,7 @@ describe("Messenger Contract", function () {
     const [owner, addr1, addr2] = await hre.viem.getWalletClients();
     const publicClient = await hre.viem.getPublicClient();
 
-    const { messenger }: { messenger: { address: `0x${string}` } } =
-      await hre.ignition.deploy(MessengerModule);
+    const { messenger } = await hre.ignition.deploy(MessengerModule);
 
     const messengerContract = await hre.viem.getContractAt(
       "Messenger",
@@ -58,7 +57,6 @@ describe("Messenger Contract", function () {
       expect(logs.length).to.equal(1);
       expect(logs[0].args.sender).to.equal(getAddress(owner.address));
       expect(logs[0].args.receiver).to.equal(getAddress(addr1.address));
-      // expect(logs[0].args.timestamp).to.be.a("bigint");
     });
 
     it("should revert if receiver is zero address", async function () {
@@ -123,7 +121,7 @@ describe("Messenger Contract", function () {
         [addr1.address],
         { account: owner },
       );
-      expect(messages).to.be.an("array").that.is.empty;
+      expect(messages).to.deep.equal([]);
     });
 
     it("should return messages between two addresses", async function () {
@@ -150,12 +148,10 @@ describe("Messenger Contract", function () {
       expect(messages[0].sender).to.equal(getAddress(owner.address));
       expect(messages[0].receiver).to.equal(getAddress(addr1.address));
       expect(messages[0].content).to.equal(content1);
-      // expect(messages[0].timestamp).to.be.a("bigint");
 
       expect(messages[1].sender).to.equal(getAddress(addr1.address));
       expect(messages[1].receiver).to.equal(getAddress(owner.address));
       expect(messages[1].content).to.equal(content2);
-      // expect(messages[1].timestamp).to.be.a("bigint");
     });
   });
 
@@ -168,7 +164,7 @@ describe("Messenger Contract", function () {
       const contacts = await messengerContract.read.getContacts({
         account: owner,
       });
-      expect(contacts).to.be.an("array").that.is.empty;
+      expect(contacts).to.deep.equal([]);
     });
 
     it("should add and return unique contacts", async function () {
@@ -210,11 +206,15 @@ describe("Messenger Contract", function () {
         account: owner,
       });
       const addr1Contacts = await messengerContract.read.getContacts({
-        account: addr,
+        account: addr1,
       });
 
-      expect(ownerContacts).to.deep.equal([getAddress(addr1.address)]);
-      expect(addr1Contacts).to.deep.equal([getAddress(owner.address)]);
+      expect(ownerContacts).to.deep.equal([
+        getAddress(addr1.address).toString(),
+      ]);
+      expect(addr1Contacts).to.deep.equal([
+        getAddress(owner.address).toString(),
+      ]);
     });
   });
 });
