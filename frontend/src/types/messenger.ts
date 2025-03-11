@@ -1,10 +1,10 @@
 export interface Message {
-    sender: string;
-    receiver: string;
-    content: string;
-    timestamp: bigint;
+  sender: `0x${string}`;
+  receiver: `0x${string}`;
+  content: string;
+  timestamp: bigint;
 }
 
 export interface Contact {
-    address: string;
+  address: `0x${string}`;
 }

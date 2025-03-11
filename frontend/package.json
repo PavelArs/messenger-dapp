@@ -1,14 +1,14 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,mjc,cjs,jsx}\"",
-    "check-types": "tsc --noEmit"
+    "prettier": "prettier --write \"**/*.{ts,tsx,js,mjc,cjs,jsx}\"",
+    "typecheck": "tsc --noEmit",
+    "generate": "wagmi generate"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.4",
@@ -25,6 +25,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@wagmi/cli": "^2.2.0",
     "dotenv": "^16.4.7",
     "eslint": "^9.21.0",
     "eslint-config-next": "^15.2.1",
