@@ -14,8 +14,8 @@
     "deploy:sepolia": "hardhat ignition deploy ignition/modules/Messenger.ts --network sepolia",
     "lint": "npm run prettier -- --check && npm run eslint",
     "lint:fix": "npm run prettier -- --write && npm run eslint -- --fix",
-    "eslint": "eslint \"ignition/**/*.{js,jsx,ts,tsx}\" \"test/**/*.{js,jsx,ts,tsx}\"",
-    "prettier": "prettier \"*.{js,ts,md,json}\" \"ignition/modules/*.{js,ts,md,json}\" \"test/*.{js,ts,md,json}\" \"contracts/**/*.sol\""
+    "eslint": "eslint \"ignition/modules/**/*.{js,jsx,ts,tsx}\" \"test/**/*.{js,jsx,ts,tsx}\"",
+    "prettier": "prettier \"*.{js,ts,md,json}\" \"ignition/modules/**/*.{js,ts,md,json}\" \"test/**/*.{js,ts,md,json}\" \"contracts/**/*.sol\""
   },
   "keywords": [
     "Web3",
