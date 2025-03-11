@@ -1,18 +1,18 @@
-import { useMemo, useState } from "react";
-import { useReadContract, useWriteContract } from "wagmi";
+import { useEffect, useMemo, useState } from "react";
+import { useReadContract, useWatchContractEvent, useWriteContract } from "wagmi";
 import MessengerContract from "@/contracts/Messenger.json";
 import type { Contact, Message } from "@/types/messenger";
 
-export function useMessenger(userAddress: string | undefined) {
+const contractConfig = {
+    address: MessengerContract.address as `0x${string}`,
+    abi: MessengerContract.abi,
+};
+
+export function useMessenger(userAddress: `0x${string}` | undefined) {
     const [receiverAddress, setReceiverAddress] = useState("");
     const [selectedContact, setSelectedContact] = useState<string | null>(null);
     const [messages, setMessages] = useState<Message[]>([]);
     const { writeContractAsync } = useWriteContract();
-
-    const contractConfig = {
-        address: MessengerContract.address as `0x${string}`,
-        abi: MessengerContract.abi,
-    };
 
     const { data: contactAddresses, refetch: refetchContacts } = useReadContract({
         ...contractConfig,
@@ -20,18 +20,14 @@ export function useMessenger(userAddress: string | undefined) {
         account: userAddress,
     });
 
-    const { data: sentMessages, refetch: refetchSent } = useReadContract({
+    const { data: conversationData, refetch: refetchConversation } = useReadContract({
         ...contractConfig,
-        functionName: "getSentMessages",
+        functionName: "getConversation",
         account: userAddress,
         args: [selectedContact],
-    });
-
-    const { data: receivedMessages } = useReadContract({
-        ...contractConfig,
-        functionName: "getReceivedMessages",
-        account: userAddress,
-        args: [selectedContact],
+        query: {
+            enabled: !!selectedContact, // Only fetch when a contact is selected
+        },
     });
 
     const contacts: Contact[] = useMemo(() => {
@@ -40,21 +36,47 @@ export function useMessenger(userAddress: string | undefined) {
     }, [contactAddresses]);
 
     const dialogMessages: Message[] = useMemo(() => {
-        if (!sentMessages && !receivedMessages) return [];
-        return [...(sentMessages || []), ...(receivedMessages || [])]
-            .filter(
-                (message, index, self) =>
-                    index ===
-                    self.findIndex(
-                        (m) =>
-                            m.sender === message.sender &&
-                            m.recipient === message.recipient &&
-                            m.content === message.content &&
-                            m.timestamp === message.timestamp
-                    )
-            )
+        if (!conversationData) return [];
+        return (conversationData as any[])
+            .map((msg) => ({
+                sender: msg.sender.toLowerCase(),
+                receiver: msg.receiver.toLowerCase(),
+                content: msg.content,
+                timestamp: BigInt(msg.timestamp),
+            }))
             .sort((a, b) => Number(a.timestamp - b.timestamp));
-    }, [sentMessages, receivedMessages]);
+    }, [conversationData]);
+
+    useEffect(() => {
+        setMessages(dialogMessages);
+    }, [dialogMessages]);
+
+    useWatchContractEvent({
+        ...contractConfig,
+        eventName: "MessageSent",
+        onLogs(logs) {
+            const latestLog = logs[logs.length - 1];
+            const { sender, receiver } = latestLog.args;
+            if (
+                selectedContact &&
+                (sender.toLowerCase() === selectedContact.toLowerCase() ||
+                    receiver.toLowerCase() === selectedContact.toLowerCase())
+            ) {
+                refetchConversation();
+            }
+        },
+    });
+
+    useWatchContractEvent({
+        ...contractConfig,
+        eventName: "ContactAdded",
+        onLogs(logs) {
+            const latestLog = logs[logs.length - 1];
+            if (latestLog.args.user.toLowerCase() === userAddress?.toLowerCase()) {
+                refetchContacts();
+            }
+        },
+    });
 
     const handleSendMessage = async (content: string) => {
         if (!userAddress || !receiverAddress) return;
@@ -67,9 +89,8 @@ export function useMessenger(userAddress: string | undefined) {
             });
 
             if (selectedContact?.toLowerCase() === receiverAddress.toLowerCase()) {
-                refetchSent();
+                refetchConversation();
             }
-            refetchContacts();
         } catch (error) {
             console.error("Failed to send message:", error);
         }
@@ -84,8 +105,8 @@ export function useMessenger(userAddress: string | undefined) {
                 functionName: "sendMessage",
                 args: [selectedContact, content],
             });
-            refetchSent();
-            refetchContacts();
+
+            refetchConversation();
         } catch (error) {
             console.error("Failed to send quick reply:", error);
         }
@@ -97,7 +118,7 @@ export function useMessenger(userAddress: string | undefined) {
         selectedContact,
         setSelectedContact,
         contacts,
-        dialogMessages,
+        dialogMessages: messages,
         handleSendMessage,
         handleQuickReply,
     };
