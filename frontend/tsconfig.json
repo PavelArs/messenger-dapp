@@ -26,11 +26,17 @@
       "@/*": [
         "./src/*"
       ],
+      "@/components/*": [
+        "./src/components/*"
+      ],
       "@/contracts/*": [
         "./src/contracts/*"
       ],
-      "@/contracts/types": [
-        "./src/contracts/typechain-types"
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
       ]
     }
   },

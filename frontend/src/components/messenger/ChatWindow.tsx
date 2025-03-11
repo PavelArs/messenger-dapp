@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import styles from "../messenger.module.css";
+import styles from "./styles/messenger.module.css";
+import { Message } from "@/types/messenger";
 
 type ChatWindowProps = {
     currentUserAddress: string;
@@ -10,7 +11,7 @@ type ChatWindowProps = {
     onSendReply: (content: string) => Promise<void>;
 };
 
-export default function ChatWindow({
+export function ChatWindow({
     currentUserAddress,
     selectedContact,
     messages,

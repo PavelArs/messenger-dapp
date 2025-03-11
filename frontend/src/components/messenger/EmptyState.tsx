@@ -1,13 +1,13 @@
 "use client";
 
-import styles from "../messenger.module.css";
+import styles from "./styles/messenger.module.css";
 
 type EmptyStateProps = {
     title?: string;
     message?: string;
 };
 
-export default function EmptyState({
+export function EmptyState({
     title = "Select a Contact",
     message = "Choose a contact from the sidebar to start messaging",
 }: EmptyStateProps) {

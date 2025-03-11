@@ -1,10 +1,7 @@
 "use client";
 
-import styles from "../messenger.module.css";
-
-type Contact = {
-    address: string;
-};
+import styles from "./styles/messenger.module.css";
+import { Contact } from "@/types/messenger";
 
 type ContactsListProps = {
     contacts: Contact[];
@@ -12,11 +9,7 @@ type ContactsListProps = {
     onSelectContact: (address: string) => void;
 };
 
-export default function ContactsList({
-    contacts,
-    selectedContact,
-    onSelectContact,
-}: ContactsListProps) {
+export function ContactsList({ contacts, selectedContact, onSelectContact }: ContactsListProps) {
     const formatAddress = (address: string) => {
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     };

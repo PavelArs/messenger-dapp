@@ -1,5 +1,5 @@
 import "@rainbow-me/rainbowkit/styles.css";
-import { ContextProviders } from "./context";
+import { ContextProviders } from "@/app/providers";
 import { headers } from "next/headers";
 import React from "react";
 import "./globals.css";

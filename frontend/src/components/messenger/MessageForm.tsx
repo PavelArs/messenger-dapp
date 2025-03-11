@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styles from "../messenger.module.css";
+import styles from "./styles/messenger.module.css";
 
 type MessageFormProps = {
     receiverAddress: string;
@@ -9,7 +9,7 @@ type MessageFormProps = {
     onSendMessage: (content: string) => Promise<void>;
 };
 
-export default function MessageForm({
+export function MessageForm({
     receiverAddress,
     onReceiverAddressChange,
     onSendMessage,
