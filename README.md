@@ -40,8 +40,8 @@ npm run build        # Clean and compile contracts
 npm run test         # Run tests
 
 # Deployment
-npm run deploy:local # Deploy to local network using Ignition
-npm run deploy       # Deploy to Sepolia testnet
+npm run deploy:local       # Deploy to local network using Ignition
+npm run deploy:sepolia     # Deploy to Sepolia testnet using Ignition
 ```
 
 ## Deployment
@@ -98,7 +98,7 @@ The smart contracts are deployed to:
 
 ## Technologies Used
 
-- **Smart Contracts**: Solidity, Hardhat, Ethers.js
+- **Smart Contracts**: Solidity, Hardhat, Viem
 - **Frontend**: Next.js, Wagmi, Viem, RainbowKit, React
 - **Testing**: Mocha, Chai
 - **Deployment**: Hardhat Ignition
