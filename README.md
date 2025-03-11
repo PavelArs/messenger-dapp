@@ -54,12 +54,14 @@ The smart contracts are deployed to:
 ## Getting Started
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/yourusername/messenger-dapp.git
    cd messenger-dapp
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    cd frontend
@@ -67,16 +69,19 @@ The smart contracts are deployed to:
    ```
 
 3. Start the local Hardhat node:
+
    ```
    npm run node
    ```
 
 4. In a separate terminal, deploy the contracts locally:
+
    ```
    npm run deploy:local
    ```
 
 5. Start the frontend application:
+
    ```
    cd frontend
    npm run dev

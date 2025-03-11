@@ -24,7 +24,11 @@ contract Messenger {
     Message[] private _messages;
 
     // Events for off-chain tracking
-    event MessageSent(address indexed sender, address indexed receiver, uint40 timestamp);
+    event MessageSent(
+        address indexed sender,
+        address indexed receiver,
+        uint40 timestamp
+    );
     event ContactAdded(address indexed user, address indexed contact);
 
     /**
@@ -38,12 +42,14 @@ contract Messenger {
 
         // Create and store the message
         uint256 messageId = _messages.length;
-        _messages.push(Message({
-            sender: msg.sender,
-            receiver: _to,
-            content: _content,
-            timestamp: uint40(block.timestamp)
-        }));
+        _messages.push(
+            Message({
+                sender: msg.sender,
+                receiver: _to,
+                content: _content,
+                timestamp: uint40(block.timestamp)
+            })
+        );
 
         bytes32 conversationHash = _getConversationHash(msg.sender, _to);
         _conversationToMessageIds[conversationHash].push(messageId);
@@ -60,9 +66,16 @@ contract Messenger {
      * @param _otherParty Address of the other conversation participant
      * @return Array of messages in chronological order
      */
-    function getConversation(address _otherParty) external view returns (Message[] memory) {
-        bytes32 conversationHash = _getConversationHash(msg.sender, _otherParty);
-        uint256[] storage messageIds = _conversationToMessageIds[conversationHash];
+    function getConversation(
+        address _otherParty
+    ) external view returns (Message[] memory) {
+        bytes32 conversationHash = _getConversationHash(
+            msg.sender,
+            _otherParty
+        );
+        uint256[] storage messageIds = _conversationToMessageIds[
+                    conversationHash
+            ];
 
         if (messageIds.length == 0) {
             return new Message[](0);
@@ -73,8 +86,12 @@ contract Messenger {
 
         for (uint256 i = 0; i < messageIds.length; i++) {
             Message storage message = _messages[messageIds[i]];
-            if ((message.sender == msg.sender && message.receiver == _otherParty) ||
-                (message.sender == _otherParty && message.receiver == msg.sender)) {
+            if (
+                (message.sender == msg.sender &&
+                    message.receiver == _otherParty) ||
+                (message.sender == _otherParty &&
+                    message.receiver == msg.sender)
+            ) {
                 conversation[index] = message;
                 index++;
             }
@@ -97,11 +114,17 @@ contract Messenger {
      * @param _addr2 Second address
      * @return Unique hash for the conversation
      */
-    function _getConversationHash(address _addr1, address _addr2) private pure returns (bytes32) {
-        return keccak256(abi.encodePacked(
-            _addr1 < _addr2 ? _addr1 : _addr2,
-            _addr1 < _addr2 ? _addr2 : _addr1
-        ));
+    function _getConversationHash(
+        address _addr1,
+        address _addr2
+    ) private pure returns (bytes32) {
+        return
+            keccak256(
+            abi.encodePacked(
+                _addr1 < _addr2 ? _addr1 : _addr2,
+                _addr1 < _addr2 ? _addr2 : _addr1
+            )
+        );
     }
 
     /**
