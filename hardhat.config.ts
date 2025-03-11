@@ -1,10 +1,5 @@
-import "@typechain/hardhat";
-import "@nomicfoundation/hardhat-ethers";
-import "@nomicfoundation/hardhat-chai-matchers";
-import "@nomicfoundation/hardhat-verify";
-import "@nomicfoundation/hardhat-ignition";
-import "solidity-coverage";
-
+import "@nomicfoundation/hardhat-toolbox-viem";
+// import "@nomicfoundation/hardhat-chai-matchers";
 import { HardhatUserConfig } from "hardhat/types";
 import { vars } from "hardhat/config";
 
@@ -33,10 +28,6 @@ const config: HardhatUserConfig = {
     cache: "./cache",
     sources: "./contracts",
     tests: "./test",
-  },
-  typechain: {
-    outDir: "typechain-types",
-    target: "ethers-v6",
   },
   etherscan: {
     apiKey: {

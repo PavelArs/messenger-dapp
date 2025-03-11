@@ -40,8 +40,8 @@ npm run build        # Clean and compile contracts
 npm run test         # Run tests
 
 # Deployment
-npm run deploy:local # Deploy to local network using Ignition
-npm run deploy       # Deploy to Sepolia testnet
+npm run deploy:local       # Deploy to local network using Ignition
+npm run deploy:sepolia     # Deploy to Sepolia testnet using Ignition
 ```
 
 ## Deployment
@@ -54,12 +54,14 @@ The smart contracts are deployed to:
 ## Getting Started
 
 1. Clone the repository:
+
    ```
    git clone https://github.com/yourusername/messenger-dapp.git
    cd messenger-dapp
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    cd frontend
@@ -67,16 +69,19 @@ The smart contracts are deployed to:
    ```
 
 3. Start the local Hardhat node:
+
    ```
    npm run node
    ```
 
 4. In a separate terminal, deploy the contracts locally:
+
    ```
    npm run deploy:local
    ```
 
 5. Start the frontend application:
+
    ```
    cd frontend
    npm run dev
@@ -93,7 +98,7 @@ The smart contracts are deployed to:
 
 ## Technologies Used
 
-- **Smart Contracts**: Solidity, Hardhat, Ethers.js
+- **Smart Contracts**: Solidity, Hardhat, Viem
 - **Frontend**: Next.js, Wagmi, Viem, RainbowKit, React
 - **Testing**: Mocha, Chai
 - **Deployment**: Hardhat Ignition
