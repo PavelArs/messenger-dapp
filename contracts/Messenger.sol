@@ -37,8 +37,8 @@ contract Messenger {
      * @param _content Content of the message
      */
     function sendMessage(address _to, string calldata _content) external {
-        require(_to != address(0), "Invalid receiver");
-        require(bytes(_content).length > 0, "Empty message");
+        require(_to != address(0), "Invalid receiver address");
+        require(bytes(_content).length > 0, "Message cannot be empty");
 
         // Create and store the message
         uint256 messageId = _messages.length;

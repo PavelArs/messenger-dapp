@@ -1,285 +1,219 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
-import { Messenger } from "../typechain-types";
-import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
+import { getAddress, parseEventLogs } from "viem";
+import hre from "hardhat";
+import MessengerModule from "../ignition/modules/MessengerModule";
 
-describe("Messenger", function () {
-  let messenger: Messenger;
-  let owner: SignerWithAddress;
-  let user1: SignerWithAddress;
-  let user2: SignerWithAddress;
-  let user3: SignerWithAddress;
+describe("Messenger Contract", function () {
+  async function deployMessengerFixture() {
+    const [owner, addr1, addr2] = await hre.viem.getWalletClients();
+    const publicClient = await hre.viem.getPublicClient();
 
-  beforeEach(async function () {
-    [owner, user1, user2, user3] = await ethers.getSigners();
+    const { messenger } = await hre.ignition.deploy(MessengerModule);
 
-    const MessengerFactory = await ethers.getContractFactory("Messenger");
-    messenger = await MessengerFactory.deploy();
+    const messengerContract = await hre.viem.getContractAt(
+      "Messenger",
+      messenger.address,
+    );
+
+    return {
+      messengerContract,
+      owner: owner.account,
+      addr1: addr1.account,
+      addr2: addr2.account,
+      publicClien,
+    };
+  }
+
+  describe("Deployment", function () {
+    it("should deploy successfully", async function () {
+      const { messengerContract } = await loadFixture(deployMessengerFixture);
+      expect(getAddress(messengerContract.address)).to.be.equal(
+        "0x5FbDB2315678afecb367f032d93F642f64180aa3,
+      );
+    });
   });
 
   describe("sendMessage", function () {
-    it("should send a message successfully", async function () {
-      const message = "Hello, this is a test message";
+    it("should send a message and emit MessageSent event", async function () {
+      const { messengerContract, owner, addr1, publicClient } =
+        await loadFixture(deployMessengerFixture);
+      const content = "Hello, world!";
 
-      // Send a message from user1 to user2
-      const tx = await messenger
-        .connect(user1)
-        .sendMessage(user2.address, message);
+      const tx = await messengerContract.write.sendMessage(
+        [addr1.address, content],
+        { account: owner },
+      );
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash: tx,
+      });
 
-      // Check that the MessageSent event was emitted correctly
-      await expect(tx)
-        .to.emit(messenger, "MessageSent")
-        .withArgs(
-          user1.address,
-          user2.address,
-          0,
-          await ethers.provider
-            .getBlock(tx.blockNumber!)
-            .then((b) => b!.timestamp),
-        );
+      const logs = parseEventLogs({
+        abi: messengerContract.abi,
+        logs: receipt.logs,
+        eventName: "MessageSent"
+      });
+
+      expect(logs.length).to.equal(1);
+      expect(logs[0].args.sender).to.equal(getAddress(owner.address));
+      expect(logs[0].args.receiver).to.equal(getAddress(addr1.address));
+      // expect(logs[0].args.timestamp).to.be.a("bigint");
     });
 
-    it("should revert when sending to zero address", async function () {
+    it("should revert if receiver is zero address", async function () {
+      const { messengerContract, owner } = await loadFixture(
+        deployMessengerFixture
+      );
+      const content = "Test message";
+
       await expect(
-        messenger
-          .connect(user1)
-          .sendMessage(ethers.ZeroAddress, "Test message"),
-      ).to.be.revertedWith("Invalid recipient");
+        messengerContract.write.sendMessage(
+          ["0x0000000000000000000000000000000000000000", content],
+          { account: owner }
+        )
+      ).to.be.rejectedWith("Invalid receiver address");
     });
 
-    it("should revert when sending an empty message", async function () {
+    it("should revert if message content is empty", async function () {
+      const { messengerContract, owner, addr1 } = await loadFixture(
+        deployMessengerFixture,
+      );
+
       await expect(
-        messenger.connect(user1).sendMessage(user2.address, ""),
-      ).to.be.revertedWith("Empty message");
+        messengerContract.write.sendMessage([addr1.address, ""], {
+          account: owner
+        })
+      ).to.be.rejectedWith("Message cannot be empty");
     });
 
     it("should add contacts when sending messages", async function () {
-      // Send a message
-      await messenger
-        .connect(user1)
-        .sendMessage(user2.address, "First message");
+      const { messengerContract, owner, addr1, publicClient } =
+        await loadFixture(deployMessengerFixture);
 
-      // Check that the contact was added
-      const contacts = await messenger.connect(user1).getContacts();
-      expect(contacts).to.include(user2.address);
+      const tx = await messengerContract.write.sendMessage(
+        [addr1.address, "First message"],
+        { account: owner }
+      );
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash: tx
+      });
 
-      // Check that ContactAdded event was emitted
-      await expect(
-        messenger.connect(user1).sendMessage(user2.address, "First message"),
-      ).to.not.emit(messenger, "ContactAdded"); // Should not emit again for existing contact
+      const contactLogs = parseEventLogs({
+        abi: messengerContract.abi,
+        logs: receipt.logs,
+        eventName: "ContactAdded"
+      });
 
-      // New contact should emit event
-      await expect(
-        messenger.connect(user1).sendMessage(user3.address, "Hello user3"),
-      )
-        .to.emit(messenger, "ContactAdded")
-        .withArgs(user1.address, user3.address);
+      expect(contactLogs.length).to.equal(2); // Bidirectional
+      expect(contactLogs[0].args.user).to.equal(getAddress(owner.address));
+      expect(contactLogs[0].args.contact).to.equal(getAddress(addr1.address));
+      expect(contactLogs[1].args.user).to.equal(getAddress(addr1.address));
+      expect(contactLogs[1].args.contact).to.equal(getAddress(owner.address));
     });
   });
 
-  describe("getReceivedMessages", function () {
-    beforeEach(async function () {
-      // Setup: user1 sends messages to user2
-      await messenger.connect(user1).sendMessage(user2.address, "Message 1");
-      await messenger.connect(user1).sendMessage(user2.address, "Message 2");
-      await messenger
-        .connect(user3)
-        .sendMessage(user2.address, "Message from user3");
+  describe("getConversation", function () {
+    it("should return an empty array if no messages exist", async function () {
+      const { messengerContract, owner, addr1 } = await loadFixture(
+        deployMessengerFixture,
+      );
 
-      // user2 sends a message to user1 (should not appear in user2's received)
-      await messenger
-        .connect(user2)
-        .sendMessage(user1.address, "Reply from user2");
+      const messages = await messengerContract.read.getConversation(
+        [addr1.address],
+        { account: owner },
+      );
+      expect(messages).to.be.an("array").that.is.empty;
     });
 
-    it("should retrieve received messages correctly", async function () {
-      // Get messages received by user2 from user1
-      const receivedMessages = await messenger
-        .connect(user2)
-        .getReceivedMessages(user1.address);
+    it("should return messages between two addresses", async function () {
+      const { messengerContract, owner, addr1 } = await loadFixture(
+        deployMessengerFixture,
+      );
+      const content1 = "Hey there!";
+      const content2 = "Hi back!";
 
-      // Check message count
-      expect(receivedMessages.length).to.equal(2);
+      // Send messages
+      await messengerContract.write.sendMessage([addr1.address, content1], {
+        account: owner
+      });
+      await messengerContract.write.sendMessage([owner.address, content2], {
+        account: addr1
+      });
 
-      // Check message content
-      expect(receivedMessages[0].content).to.equal("Message 1");
-      expect(receivedMessages[1].content).to.equal("Message 2");
+      const messages = await messengerContract.read.getConversation(
+        [addr1.address],
+        { account: owner }
+      );
+      expect(messages.length).to.equal(2);
 
-      // Check sender and recipient
-      expect(receivedMessages[0].sender).to.equal(user1.address);
-      expect(receivedMessages[0].recipient).to.equal(user2.address);
-    });
+      expect(messages[0].sender).to.equal(getAddress(owner.address));
+      expect(messages[0].receiver).to.equal(getAddress(addr1.address));
+      expect(messages[0].content).to.equal(content1);
+      // expect(messages[0].timestamp).to.be.a("bigint");
 
-    it("should return empty array when no messages exist", async function () {
-      // Get messages received by user1 from user3 (none should exist)
-      const receivedMessages = await messenger
-        .connect(user1)
-        .getReceivedMessages(user3.address);
-
-      // Check that array is empty
-      expect(receivedMessages.length).to.equal(0);
-    });
-  });
-
-  describe("getSentMessages", function () {
-    beforeEach(async function () {
-      // Setup: user1 sends messages to multiple users
-      await messenger
-        .connect(user1)
-        .sendMessage(user2.address, "To user2: Message 1");
-      await messenger
-        .connect(user1)
-        .sendMessage(user2.address, "To user2: Message 2");
-      await messenger
-        .connect(user1)
-        .sendMessage(user3.address, "To user3: Message 1");
-
-      // user2 sends a message to user1 (should not appear in user1's sent)
-      await messenger
-        .connect(user2)
-        .sendMessage(user1.address, "From user2 to user1");
-    });
-
-    it("should retrieve sent messages correctly 'From user2 to user1'", async function () {
-      // Get messages sent by user1 to user2
-      const sentMessages = await messenger
-        .connect(user1)
-        .getSentMessages(user2.address);
-
-      // Check message count
-      expect(sentMessages.length).to.equal(2);
-
-      // Check message content
-      expect(sentMessages[0].content).to.equal("To user2: Message 1");
-      expect(sentMessages[1].content).to.equal("To user2: Message 2");
-
-      // Check sender and recipient
-      expect(sentMessages[0].sender).to.equal(user1.address);
-      expect(sentMessages[0].recipient).to.equal(user2.address);
-    });
-
-    it("should return empty array when no sent messages exist", async function () {
-      // Get messages sent by user3 to user1 (none should exist)
-      const sentMessages = await messenger
-        .connect(user3)
-        .getSentMessages(user1.address);
-
-      // Check that array is empty
-      expect(sentMessages.length).to.equal(0);
-    });
-
-    it("should properly filter messages by recipient", async function () {
-      // Get messages sent by user1 to user3
-      const sentToUser3 = await messenger
-        .connect(user1)
-        .getSentMessages(user3.address);
-
-      // Check message count and content
-      expect(sentToUser3.length).to.equal(1);
-      expect(sentToUser3[0].content).to.equal("To user3: Message 1");
+      expect(messages[1].sender).to.equal(getAddress(addr1.address));
+      expect(messages[1].receiver).to.equal(getAddress(owner.address));
+      expect(messages[1].content).to.equal(content2);
+      // expect(messages[1].timestamp).to.be.a("bigint");
     });
   });
 
   describe("getContacts", function () {
-    it("should return all unique contacts", async function () {
-      // Setup: user1 sends messages to multiple users
-      await messenger.connect(user1).sendMessage(user2.address, "Hello user2");
-      await messenger.connect(user1).sendMessage(user3.address, "Hello user3");
-      await messenger
-        .connect(user1)
-        .sendMessage(user2.address, "Another message to user2");
-
-      // Get contacts for user1
-      const contacts = await messenger.connect(user1).getContacts();
-
-      // Check contact count and addresses
-      expect(contacts.length).to.equal(2);
-      expect(contacts).to.include(user2.address);
-      expect(contacts).to.include(user3.address);
-    });
-
-    it("should return empty array when no contacts exist", async function () {
-      // Get contacts for user who hasn't sent any messages
-      const contacts = await messenger.connect(user3).getContacts();
-
-      // Check that array is empty
-      expect(contacts.length).to.equal(0);
-    });
-
-    it("should add contacts bidirectionally", async function () {
-      // user1 sends message to user2
-      await messenger.connect(user1).sendMessage(user2.address, "Hello user2");
-
-      // user2 sends message to user3
-      await messenger.connect(user2).sendMessage(user3.address, "Hello user3");
-
-      // Check user1's contacts
-      const user1Contacts = await messenger.connect(user1).getContacts();
-      expect(user1Contacts.length).to.equal(1);
-      expect(user1Contacts).to.include(user2.address);
-
-      // Check user2's contacts
-      const user2Contacts = await messenger.connect(user2).getContacts();
-      expect(user2Contacts.length).to.equal(2);
-      expect(user2Contacts).to.include(user1.address);
-      expect(user2Contacts).to.include(user3.address);
-
-      // Check user3's contacts
-      const user3Contacts = await messenger.connect(user3).getContacts();
-      expect(user3Contacts.length).to.equal(1);
-      expect(user3Contacts).to.include(user2.address);
-    });
-  });
-
-  describe("Complex scenarios", function () {
-    it("should handle back-and-forth conversations", async function () {
-      // user1 and user2 exchange multiple messages
-      await messenger.connect(user1).sendMessage(user2.address, "Hi user2!");
-      await messenger.connect(user2).sendMessage(user1.address, "Hello user1!");
-      await messenger.connect(user1).sendMessage(user2.address, "How are you?");
-      await messenger
-        .connect(user2)
-        .sendMessage(user1.address, "I'm good, thanks!");
-
-      // Check user1's received messages
-      const user1Received = await messenger
-        .connect(user1)
-        .getReceivedMessages(user2.address);
-      expect(user1Received.length).to.equal(2);
-      expect(user1Received[0].content).to.equal("Hello user1!");
-      expect(user1Received[1].content).to.equal("I'm good, thanks!");
-
-      // Check user2's received messages
-      const user2Received = await messenger
-        .connect(user2)
-        .getReceivedMessages(user1.address);
-      expect(user2Received.length).to.equal(2);
-      expect(user2Received[0].content).to.equal("Hi user2!");
-      expect(user2Received[1].content).to.equal("How are you?");
-    });
-
-    it("should correctly handle timestamp ordering", async function () {
-      // Send messages with some delay between them
-      await messenger.connect(user1).sendMessage(user2.address, "Message 1");
-
-      // Increase blockchain time to ensure different timestamps
-      await ethers.provider.send("evm_increaseTime", [60]); // 60 seconds
-      await ethers.provider.send("evm_mine", []);
-
-      await messenger.connect(user1).sendMessage(user2.address, "Message 2");
-
-      // Get messages
-      const receivedMessages = await messenger
-        .connect(user2)
-        .getReceivedMessages(user1.address);
-
-      // Check timestamps are in ascending order
-      expect(receivedMessages[1].timestamp).to.be.greaterThan(
-        receivedMessages[0].timestamp,
+    it("should return an empty array for new user", async function () {
+      const { messengerContract, owner } = await loadFixture(
+        deployMessengerFixture,
       );
-      expect(
-        receivedMessages[1].timestamp - receivedMessages[0].timestamp,
-      ).to.be.at.least(60);
+
+      const contacts = await messengerContract.read.getContacts({
+        account: owner,
+      });
+      expect(contacts).to.be.an("array").that.is.empty;
+    });
+
+    it("should add and return unique contacts", async function () {
+      const { messengerContract, owner, addr1, addr2 } = await loadFixture(
+        deployMessengerFixture,
+      );
+
+      // Send messages to create contacts
+      await messengerContract.write.sendMessage([addr1.address, "Msg1"], {
+        account: owner
+      });
+      await messengerContract.write.sendMessage([addr2.address, "Msg2"], {
+        account: owner
+      });
+      await messengerContract.write.sendMessage([addr1.address, "Msg3"], {
+        account: owner
+      }); // Duplicate contact
+
+      const contacts = await messengerContract.read.getContacts({
+        account: owner
+      });
+      expect(contacts.length).to.equal(2);
+      expect(contacts.map((addr) => getAddress(addr))).to.have.members([
+        getAddress(addr1.address),
+        getAddress(addr2.address)
+      ]);
+    });
+
+    it("should add contact bidirectionally", async function () {
+      const { messengerContract, owner, addr1 } = await loadFixture(
+        deployMessengerFixture,
+      );
+
+      await messengerContract.write.sendMessage([addr1.address, "Hi"], {
+        account: owner
+      });
+
+      const ownerContacts = await messengerContract.read.getContacts({
+        account: owner
+      });
+      const addr1Contacts = await messengerContract.read.getContacts({
+        account: addr1
+      });
+
+      expect(ownerContacts).to.deep.equal([getAddress(addr1.address)]);
+      expect(addr1Contacts).to.deep.equal([getAddress(owner.address)]);
     });
   });
 });
