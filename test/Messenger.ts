@@ -21,7 +21,7 @@ describe("Messenger Contract", function () {
       owner: owner.account,
       addr1: addr1.account,
       addr2: addr2.account,
-      publicClien,
+      publicClient,
     };
   }
 
@@ -29,7 +29,7 @@ describe("Messenger Contract", function () {
     it("should deploy successfully", async function () {
       const { messengerContract } = await loadFixture(deployMessengerFixture);
       expect(getAddress(messengerContract.address)).to.be.equal(
-        "0x5FbDB2315678afecb367f032d93F642f64180aa3,
+        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       );
     });
   });
@@ -51,7 +51,7 @@ describe("Messenger Contract", function () {
       const logs = parseEventLogs({
         abi: messengerContract.abi,
         logs: receipt.logs,
-        eventName: "MessageSent"
+        eventName: "MessageSent",
       });
 
       expect(logs.length).to.equal(1);
@@ -62,15 +62,15 @@ describe("Messenger Contract", function () {
 
     it("should revert if receiver is zero address", async function () {
       const { messengerContract, owner } = await loadFixture(
-        deployMessengerFixture
+        deployMessengerFixture,
       );
       const content = "Test message";
 
       await expect(
         messengerContract.write.sendMessage(
           ["0x0000000000000000000000000000000000000000", content],
-          { account: owner }
-        )
+          { account: owner },
+        ),
       ).to.be.rejectedWith("Invalid receiver address");
     });
 
@@ -81,8 +81,8 @@ describe("Messenger Contract", function () {
 
       await expect(
         messengerContract.write.sendMessage([addr1.address, ""], {
-          account: owner
-        })
+          account: owner,
+        }),
       ).to.be.rejectedWith("Message cannot be empty");
     });
 
@@ -92,16 +92,16 @@ describe("Messenger Contract", function () {
 
       const tx = await messengerContract.write.sendMessage(
         [addr1.address, "First message"],
-        { account: owner }
+        { account: owner },
       );
       const receipt = await publicClient.waitForTransactionReceipt({
-        hash: tx
+        hash: tx,
       });
 
       const contactLogs = parseEventLogs({
         abi: messengerContract.abi,
         logs: receipt.logs,
-        eventName: "ContactAdded"
+        eventName: "ContactAdded",
       });
 
       expect(contactLogs.length).to.equal(2); // Bidirectional
@@ -134,15 +134,15 @@ describe("Messenger Contract", function () {
 
       // Send messages
       await messengerContract.write.sendMessage([addr1.address, content1], {
-        account: owner
+        account: owne,
       });
       await messengerContract.write.sendMessage([owner.address, content2], {
-        account: addr1
+        account: addr1,
       });
 
       const messages = await messengerContract.read.getConversation(
         [addr1.address],
-        { account: owner }
+        { account: owner },
       );
       expect(messages.length).to.equal(2);
 
@@ -177,22 +177,22 @@ describe("Messenger Contract", function () {
 
       // Send messages to create contacts
       await messengerContract.write.sendMessage([addr1.address, "Msg1"], {
-        account: owner
+        account: owner,
       });
       await messengerContract.write.sendMessage([addr2.address, "Msg2"], {
-        account: owner
+        account: owner,
       });
       await messengerContract.write.sendMessage([addr1.address, "Msg3"], {
-        account: owner
+        account: owne,
       }); // Duplicate contact
 
       const contacts = await messengerContract.read.getContacts({
-        account: owner
+        account: owner,
       });
       expect(contacts.length).to.equal(2);
       expect(contacts.map((addr) => getAddress(addr))).to.have.members([
         getAddress(addr1.address),
-        getAddress(addr2.address)
+        getAddress(addr2.address),
       ]);
     });
 
@@ -202,14 +202,14 @@ describe("Messenger Contract", function () {
       );
 
       await messengerContract.write.sendMessage([addr1.address, "Hi"], {
-        account: owner
+        account: owne,
       });
 
       const ownerContacts = await messengerContract.read.getContacts({
-        account: owner
+        account: owner,
       });
       const addr1Contacts = await messengerContract.read.getContacts({
-        account: addr1
+        account: addr,
       });
 
       expect(ownerContacts).to.deep.equal([getAddress(addr1.address)]);

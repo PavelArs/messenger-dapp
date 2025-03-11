@@ -8,7 +8,7 @@
     "node": "hardhat node",
     "build": "npm run clean && npm run compile",
     "test": "hardhat test",
-    "coverage": "hardhat coverage",
+    "coverage": "SOLIDITY_COVERAGE=true hardhat coverage",
     "typecheck": "tsc --noEmit",
     "deploy:local": "hardhat run scripts/deploy.js --network localhost",
     "deploy:sepolia": "hardhat ignition deploy ignition/modules/Messenger.ts --network sepolia",
