@@ -24,8 +24,8 @@
   "scripts": {
     "postinstall": "husky",
     "precommit": "lint-staged",
-    "hardhat:lint:fix": "yarn workspaces focus @messenger-dapp/hardhat lint:fix",
-    "nextjs:lint:fix": "yarn workspaces focus @messenger-dapp/nextjs lint:fix"
+    "hardhat:lint:fix": "yarn workspace @messenger-dapp/hardhat lint:fix",
+    "nextjs:lint:fix": "yarn workspace @messenger-dapp/nextjs lint:fix"
   },
   "packageManager": "yarn@4.7.0",
   "devDependencies": {
