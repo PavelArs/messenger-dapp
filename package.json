@@ -26,7 +26,7 @@
     "precommit": "lint-staged",
     "hardhat:lint:fix": "yarn workspace @messenger-dapp/hardhat lint:fix",
     "nextjs:lint:fix": "yarn workspace @messenger-dapp/nextjs lint:fix",
-    "dev": "concurrently \"yarn workspace @messenger-dapp/hardhat node\" \"yarn workspace @messenger-dapp/nextjs dev\"",
+    "dev": "concurrently \"yarn workspace @messenger-dapp/hardhat dev\" \"yarn workspace @messenger-dapp/nextjs dev\"",
     "build": "yarn workspace @messenger-dapp/hardhat build && yarn workspace @messenger-dapp/nextjs build",
     "start": "yarn workspace @messenger-dapp/nextjs start",
     "test": "yarn workspace @messenger-dapp/hardhat test",
