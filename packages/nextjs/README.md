@@ -28,9 +28,12 @@ send messages to any Ethereum address and view their messaging history in a chat
 - `/src`: Application source code
     - `/app`: Next.js App Router pages and layouts
         - `/messenger`: Messenger page with messaging functionality
-        - `/config`: Configuration files for blockchain networks
-        - `/context`: React context providers
-    - `/contracts`: Contract artifacts (JSON ABI and addresses)
+    - `/components`: React components
+        - `/messenger`: Messenger-specific components
+        - `/ui`: Shared UI components
+    - `/hooks`: Custom React hooks
+    - `/types`: TypeScript type definitions
+    - `/generated.ts`: Generated contract types from Wagmi CLI
 
 ## Available Scripts
 
@@ -44,7 +47,12 @@ npm run start      # Start production server
 
 # Quality Checks
 npm run lint       # Run ESLint
+npm run lint:fix   # Fix ESLint issues
+npm run prettier   # Check formatting
 npm run typecheck  # Run TypeScript type checking
+
+# Code Generation
+npm run generate   # Generate contract types with Wagmi CLI
 ```
 
 ## Smart Contract Integration
@@ -59,36 +67,39 @@ functions:
 
 ## Getting Started
 
-1. Ensure the main package is running a local Hardhat node:
+1. Ensure you're in the root of the monorepo and install all dependencies:
    ```
-   cd ..
-   npm run dev
-   ```
-
-2. Deploy the contracts to the local network (in a separate terminal):
-   ```
-   npm run deploy:local
+   yarn install
    ```
 
-3. Start the Next.js development server:
+2. Start the Hardhat node from the root directory:
    ```
-   cd frontend
-   npm run dev
+   yarn workspace @messenger-dapp/hardhat node
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+3. Deploy the contracts to the local network (in a separate terminal):
+   ```
+   yarn workspace @messenger-dapp/hardhat deploy:local
+   ```
 
-5. Connect your wallet using MetaMask or another Ethereum wallet
+4. Start the Next.js development server:
+   ```
+   yarn workspace @messenger-dapp/nextjs dev
+   ```
 
-6. Navigate to the Messenger page to start sending and receiving messages
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+6. Connect your wallet using MetaMask or another Ethereum wallet
+
+7. Navigate to the Messenger page to start sending and receiving messages
 
 ## Network Support
 
 The application supports the following networks:
 
 - **Development**: Hardhat local network
-- **Test**: Sepolia testnet
-- **Production**: Ethereum mainnet
+- **Test**: Monad testnet
+- **Production**: Ethereum mainnet (planned)
 
 ## UI Components
 

@@ -13,43 +13,34 @@ The Messenger DApp demonstrates how to build a decentralized application with:
 
 ## Repository Structure
 
-This project is organized as a monorepo with two main packages:
+This project is organized as a monorepo with Yarn workspaces:
 
-- **Root Directory**: Contains the Solidity smart contracts, tests, and deployment scripts
-- **`/frontend`**: Contains the Next.js web application that interacts with the smart contracts
+- **Root Directory**: Contains workspace configuration and shared tooling
+- **`packages/hardhat`**: Contains the Solidity smart contracts, tests, and deployment scripts
+- **`packages/nextjs`**: Contains the Next.js web application that interacts with the smart contracts
 
-## Smart Contract Features
-
-The Messenger smart contract provides:
+## Features
 
 - Send messages to any Ethereum address
 - Store message history on-chain
-- Retrieve sent and received messages
-- Track message counts
+- View sent and received messages in a chat-like interface
+- Connect with popular Ethereum wallets via RainbowKit
+- Real-time updates when new messages are sent
 
 ## Available Scripts (Root Directory)
 
 ```shell
+# Installation
+yarn install         # Install all dependencies for all workspaces
+
 # Development
-npm run node         # Start a local Hardhat node
-npm run compile      # Compile contracts
-npm run clean        # Clean the build artifacts
-npm run build        # Clean and compile contracts
+yarn workspace @messenger-dapp/hardhat node         # Start a local Hardhat node
+yarn workspace @messenger-dapp/hardhat deploy:local # Deploy to local network
+yarn workspace @messenger-dapp/nextjs dev           # Start Next.js development server
 
-# Testing
-npm run test         # Run tests
-
-# Deployment
-npm run deploy:local       # Deploy to local network using Ignition
-npm run deploy:sepolia     # Deploy to Sepolia testnet using Ignition
+# Quality Checks
+yarn precommit       # Run lint-staged for pre-commit checks
 ```
-
-## Deployment
-
-The smart contracts are deployed to:
-
-- **Local**: For development purposes using Hardhat's local node
-- **Sepolia Testnet**: For testing in a public environment
 
 ## Getting Started
 
@@ -63,28 +54,25 @@ The smart contracts are deployed to:
 2. Install dependencies:
 
    ```
-   npm install
-   cd frontend
-   npm install
+   yarn install
    ```
 
 3. Start the local Hardhat node:
 
    ```
-   npm run node
+   yarn workspace @messenger-dapp/hardhat node
    ```
 
 4. In a separate terminal, deploy the contracts locally:
 
    ```
-   npm run deploy:local
+   yarn workspace @messenger-dapp/hardhat deploy:local
    ```
 
 5. Start the frontend application:
 
    ```
-   cd frontend
-   npm run dev
+   yarn workspace @messenger-dapp/nextjs dev
    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) to use the application
@@ -96,12 +84,22 @@ The smart contracts are deployed to:
 3. Click "Send Message" to send a message
 4. View your sent and received messages in the Messages section
 
+## Workspace-Specific Documentation
+
+For more detailed information about each workspace, please refer to their respective README files:
+
+- [Hardhat (Smart Contracts) Documentation](./packages/hardhat/README.md)
+- [Next.js (Frontend) Documentation](./packages/nextjs/README.md)
+
 ## Technologies Used
 
 - **Smart Contracts**: Solidity, Hardhat, Viem
 - **Frontend**: Next.js, Wagmi, Viem, RainbowKit, React
 - **Testing**: Mocha, Chai
 - **Deployment**: Hardhat Ignition
+- **Package Management**: Yarn Workspaces
+- **Code Quality**: ESLint, Prettier, TypeScript
+- **Git Hooks**: Husky, lint-staged
 
 ## License
 

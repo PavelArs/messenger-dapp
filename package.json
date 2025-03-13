@@ -25,12 +25,22 @@
     "postinstall": "husky",
     "precommit": "lint-staged",
     "hardhat:lint:fix": "yarn workspace @messenger-dapp/hardhat lint:fix",
-    "nextjs:lint:fix": "yarn workspace @messenger-dapp/nextjs lint:fix"
+    "nextjs:lint:fix": "yarn workspace @messenger-dapp/nextjs lint:fix",
+    "dev": "concurrently \"yarn workspace @messenger-dapp/hardhat node\" \"yarn workspace @messenger-dapp/nextjs dev\"",
+    "build": "yarn workspace @messenger-dapp/hardhat build && yarn workspace @messenger-dapp/nextjs build",
+    "start": "yarn workspace @messenger-dapp/nextjs start",
+    "test": "yarn workspace @messenger-dapp/hardhat test",
+    "deploy:local": "yarn workspace @messenger-dapp/hardhat deploy:local",
+    "deploy:monad": "yarn workspace @messenger-dapp/hardhat deploy:monad",
+    "lint": "yarn hardhat:lint:fix && yarn nextjs:lint:fix",
+    "clean": "rimraf node_modules **/node_modules"
   },
   "packageManager": "yarn@4.7.0",
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "husky": "^9.1.6",
-    "lint-staged": "^15.2.10"
+    "lint-staged": "^15.2.10",
+    "rimraf": "^5.0.5"
   },
   "engines": {
     "node": ">=20.11.1"
