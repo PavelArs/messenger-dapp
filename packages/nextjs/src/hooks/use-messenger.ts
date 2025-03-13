@@ -4,12 +4,12 @@ import {
   useWatchContractEvent,
   useWriteContract,
 } from "wagmi";
-import MessengerContract from "@/contracts/Messenger.json";
+import Contracts from "@/contracts";
 import type { Contact, Message } from "@/types/messenger";
 import { messengerAbi } from "@/generated";
 
 const contractConfig = {
-  address: MessengerContract.address as `0x${string}`,
+  address: Contracts.messengerContract,
   abi: messengerAbi,
 };
 
