@@ -1,14 +1,21 @@
 import "@nomicfoundation/hardhat-toolbox-viem";
+import "@nomicfoundation/hardhat-ignition-viem";
 // import "@nomicfoundation/hardhat-chai-matchers";
-import { HardhatUserConfig } from "hardhat/types";
+import type { HardhatUserConfig } from "hardhat/types";
 import { vars } from "hardhat/config";
 
-const ALCHEMY_API_KEY = vars.get("ALCHEMY_API_KEY");
 const PRIVATE_KEY = vars.has("PRIVATE_KEY") ? [vars.get("PRIVATE_KEY")] : [];
-const ETHERSCAN_API_KEY = vars.get("ETHERSCAN_API_KEY");
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.28",
+  solidity: {
+    version: "0.8.28",
+    settings: {
+      metadata: {
+        bytecodeHash: "none", // disable ipfs
+        useLiteralContent: true, // use source code
+      },
+    },
+  },
   networks: {
     hardhat: {
       chainId: 31337,
@@ -17,10 +24,10 @@ const config: HardhatUserConfig = {
       url: "http://127.0.0.1:8545/",
       chainId: 31337,
     },
-    sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
+    monadTestnet: {
+      url: "https://testnet-rpc.monad.xyz",
       accounts: PRIVATE_KEY,
-      chainId: 11155111,
+      chainId: 10143,
     },
   },
   paths: {
@@ -29,10 +36,13 @@ const config: HardhatUserConfig = {
     sources: "./contracts",
     tests: "./test",
   },
+  sourcify: {
+    enabled: true,
+    apiUrl: "https://sourcify-api-monad.blockvision.org",
+    browserUrl: "https://testnet.monadexplorer.com",
+  },
   etherscan: {
-    apiKey: {
-      sepolia: ETHERSCAN_API_KEY,
-    },
+    enabled: false,
   },
 };
 

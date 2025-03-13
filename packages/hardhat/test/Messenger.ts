@@ -2,19 +2,18 @@ import { expect } from "chai";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { getAddress, parseEventLogs } from "viem";
 import hre from "hardhat";
-import MessengerModule from "../ignition/modules/MessengerModule";
 
 describe("Messenger Contract", function () {
   async function deployMessengerFixture() {
-    const [owner, addr1, addr2] = await hre.viem.getWalletClients();
-    const publicClient = await hre.viem.getPublicClient();
-
-    const { messenger } = await hre.ignition.deploy(MessengerModule);
+    const messenger = await hre.viem.deployContract("Messenger");
 
     const messengerContract = await hre.viem.getContractAt(
       "Messenger",
       messenger.address,
     );
+
+    const [owner, addr1, addr2] = await hre.viem.getWalletClients();
+    const publicClient = await hre.viem.getPublicClient();
 
     return {
       messengerContract,
