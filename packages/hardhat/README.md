@@ -34,7 +34,7 @@ This package contains the smart contracts for the Messenger DApp, a decentralize
 npm run compile      # Compile contracts
 npm run clean        # Clean the build artifacts
 npm run build        # Clean and compile contracts
-npm run node         # Start a local Hardhat node
+npm run dev          # Start a local Hardhat node
 
 # Testing
 npm run test         # Run tests
@@ -57,16 +57,19 @@ The main `Messenger` contract provides the following functions:
 ## Getting Started
 
 1. Install dependencies:
+
    ```
    npm install
    ```
 
 2. Start a local Hardhat node:
+
    ```
    npm run node
    ```
 
 3. Deploy the contracts to the local network (in a separate terminal):
+
    ```
    npm run deploy:local
    ```
@@ -93,4 +96,4 @@ After deployment, contract addresses can be found in the deployment artifacts ge
 2. Create your feature branch: `git checkout -b feature/my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin feature/my-new-feature`
-5. Submit a pull request 
+5. Submit a pull request
